@@ -9,7 +9,7 @@ private:
     const std::string       _error;
 public:
     NibblerException(const std::string &error);
-    ~NibblerException(void) throw {}
+  ~NibblerException(void) throw () {}
     const std::string           &getError(void) const;
     virtual const std::string   getMessage(void) const;
 };

@@ -8,9 +8,12 @@
 typedef std::pair<unsigned int, unsigned int>   Coord;
 typedef enum e_key
 {
-    ESC = 0,
+    UP = 0,
+    DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    QUIT,
+    OTHERS
 }            Key;
 typedef enum e_object
 {

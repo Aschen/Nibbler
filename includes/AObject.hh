@@ -10,7 +10,7 @@ protected:
 public:
     virtual ~AObject(void) {}
     virtual const std::vector<Coord>  &getCoord(void) const = 0;
-    virtual const Object              getType(void) const = 0;
+    virtual Object              getType(void) const = 0;
 };
 
 #endif // AOBJECT_HH
