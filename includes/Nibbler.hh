@@ -1,6 +1,8 @@
 #ifndef NIBBLER_HH
 #define NIBBLER_HH
 
+#define	SBLOCK	40
+
 #include <string>
 #include <vector>
 #include <stdexcept>

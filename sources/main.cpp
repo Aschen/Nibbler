@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Sat Mar 22 16:00:07 2014 brunne-r
-// Last update Sat Mar 22 16:44:39 2014 brunne-r
+// Last update Sat Mar 22 17:25:05 2014 brunne-r
 //
 
 #include <iostream>
@@ -22,7 +22,7 @@ int		main(void)
   try
     {
       Display = Dyn.getInstance("getDisplay");
-      Display->init(500,500);
+      Display->init(30,20);
       while (Display->getKey() != QUIT)
 	{
 	  usleep(200);

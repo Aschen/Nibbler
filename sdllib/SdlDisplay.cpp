@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Sat Mar 22 16:31:39 2014 brunne-r
+// Last update Sat Mar 22 17:21:56 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -60,7 +60,9 @@ Key			SdlDisplay::getKey(void) const
 
 void		SdlDisplay::init(int width, int height)
 {
-  _screen = SDL_SetVideoMode(width, height, 0,
+  _screen = SDL_SetVideoMode(width * SBLOCK,
+			     height * SBLOCK,
+			     0,
 			     SDL_HWSURFACE | SDL_DOUBLEBUF);
   if (!_screen)
     {
