@@ -18,7 +18,7 @@ SRCS	=	sources/main.cpp \
 
 CXXFLAGS=	-Wall -W -Wextra -I ./includes
 
-LDFLAGS	=	-ldl
+LDLIBS =	-ldl -lSDL -lSDL_image
 
 OBJS	=	$(SRCS:.cpp=.o)
 
@@ -28,7 +28,7 @@ NAME	=	nibbler
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-	$(CXX) -o $(NAME) $(OBJS)
+	$(CXX) -o $(NAME) $(OBJS) $(LDLIBS)
 	make -C ./sdllib/
 
 clean:

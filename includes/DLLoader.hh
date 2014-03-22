@@ -10,10 +10,9 @@
  * Charge une librairie dynamique
  * T : type de la classe renvoye
  * F : prototype de la fonction renvoyant une instance de la classe
- * P : Parametre de la fonction renvoyant une instance de la classe
  */
 
-template <typename T, typename F, typename P>
+template <typename T, typename F>
 class	DLLoader
 {
 private:
@@ -32,7 +31,7 @@ public:
             dlclose(_dlHandler);
     }
 
-    T	*getInstance(const std::string &entry_point, P param)
+    T	*getInstance(const std::string &entry_point)
     {
         F	create;
 
@@ -46,7 +45,7 @@ public:
             std::cerr << dlerror() << std::endl;
             return NULL;
         }
-        return create(param);
+        return create();
     }
 };
 

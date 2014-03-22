@@ -1,7 +1,8 @@
 #ifndef NIBBLEREXCEPTION_HH
 #define NIBBLEREXCEPTION_HH
 
-#include "Nibbler.hh"
+#include <exception>
+#include <string>
 
 class   NibblerException : public std::exception
 {

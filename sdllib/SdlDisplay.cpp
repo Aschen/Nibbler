@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Sat Mar 22 15:51:48 2014 brunne-r
+// Last update Sat Mar 22 16:31:39 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -20,6 +20,7 @@ SdlDisplay::SdlDisplay()
 
 SdlDisplay::~SdlDisplay()
 {
+  SDL_Quit();
 }
 
 void		SdlDisplay::display(const std::vector<AObject*> &map) const
@@ -65,4 +66,9 @@ void		SdlDisplay::init(int width, int height)
     {
       throw SdlDisplay::SdlError(SDL_GetError());
     }
+}
+
+extern "C" IDisplay *getDisplay(void)
+{
+  return new SdlDisplay();
 }
