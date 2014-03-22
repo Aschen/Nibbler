@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Sat Mar 22 16:59:17 2014 brunne-r
+// Last update Sat Mar 22 17:33:42 2014 brunne-r
 //
 
 #ifndef SDLDISPLAY_H
@@ -25,6 +25,7 @@ class		SdlDisplay : public IDisplay
   };
 private:
   SDL_Surface	*_screen;
+  SDL_Surface	*_fond;
 public:
   SdlDisplay();
   ~SdlDisplay();

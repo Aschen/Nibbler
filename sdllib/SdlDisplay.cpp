@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Sat Mar 22 17:21:56 2014 brunne-r
+// Last update Sat Mar 22 17:33:59 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -25,7 +25,6 @@ SdlDisplay::~SdlDisplay()
 
 void		SdlDisplay::display(const std::vector<AObject*> &map) const
 {
-  (void)map;
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -67,6 +66,10 @@ void		SdlDisplay::init(int width, int height)
   if (!_screen)
     {
       throw SdlDisplay::SdlError(SDL_GetError());
+    }
+  else
+    {
+      SDL_FillRect(_fond, NULL, );
     }
 }
 
