@@ -6,14 +6,14 @@ Wall::Wall(const Coord &mapSize) : AObject(WALL), _mapSize(mapSize)
     unsigned int    i;
 
     // Init avec functor ?
-    for (i = 0; i <= mapSize.first; i++)
+    for (i = 0; i < mapSize.first; i++)
         _coords.push_back(Coord(i, 0));
-    for (i = 0; i <= mapSize.first; i++)
-        _coords.push_back(Coord(i, mapSize.second));
-    for (i = 0; i <= mapSize.second; i++)
+    for (i = 0; i < mapSize.first; i++)
+        _coords.push_back(Coord(i, mapSize.second - 1));
+    for (i = 0; i < mapSize.second; i++)
         _coords.push_back(Coord(0, i));
-    for (i = 0; i <= mapSize.second; i++)
-        _coords.push_back(Coord(mapSize.first, i));
+    for (i = 0; i < mapSize.second; i++)
+        _coords.push_back(Coord(mapSize.first - 1, i));
 }
 
 Wall::~Wall(void)
@@ -29,7 +29,14 @@ void Wall::addWall(const Coord &coord)
 
 void Wall::dump(void) const
 {
+    std::vector<Coord>::const_iterator   it = _coords.begin();
+
     std::cout << "Walls" << std::endl;
+    while (it != _coords.end())
+    {
+        std::cout << "[" << it->first << "," << it->second << "]" << std::endl;
+        ++it;
+    }
 }
 
 ////////////////

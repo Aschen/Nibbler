@@ -24,6 +24,8 @@ class		SdlDisplay : public IDisplay
   {
   public:
     SdlError(const std::string &error);
+    ~SdlError(void) throw() {}
+    const std::string getMessage(void) const;
   };
 private:
   SDL_Surface	*_screen;

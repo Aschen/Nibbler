@@ -5,6 +5,8 @@
 #include <iostream>
 #include <dlfcn.h>
 
+#include "NibblerException.hh"
+
 /*
  * DLLoader
  * Charge une librairie dynamique
@@ -15,6 +17,20 @@
 template <typename T, typename F>
 class	DLLoader
 {
+public:
+    class   Error : public NibblerException
+    {
+    public:
+        Error(const std::string &error) : NibblerException(error) {}
+        ~Error(void) throw() {}
+        const std::string   getMessage(void) const
+        {
+            std::stringstream   ss;
+
+            ss << "DLLoader : " << this->getError();
+            return ss.str();
+        }
+    };
 private:
     const std::string	_dl;
     void                *_dlHandler;
@@ -22,7 +38,7 @@ public:
     DLLoader(const std::string &dl)
     {
         if ((_dlHandler = dlopen(dl.c_str(), RTLD_LAZY)) == NULL)
-            std::cerr << dlerror() << std::endl;
+            throw Error(dlerror());
     }
 
     ~DLLoader(void)
@@ -35,16 +51,8 @@ public:
     {
         F	create;
 
-        if (_dlHandler == NULL)
-        {
-            std::cerr << "No library loaded !" << std::endl;
-            return NULL;
-        }
         if ((create = reinterpret_cast<F>(dlsym(_dlHandler, entry_point.c_str()))) == NULL)
-        {
-            std::cerr << dlerror() << std::endl;
-            return NULL;
-        }
+            throw Error(dlerror());
         return create();
     }
 };

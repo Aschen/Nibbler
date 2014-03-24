@@ -13,11 +13,11 @@
 SdlDisplay::SdlDisplay()
 {
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
-    throw SdlDisplay::SdlError(SDL_GetError());
+    throw SdlError(SDL_GetError());
 
   _surfaces = new SDL_Surface*[3];
   if (!_surfaces)
-    throw SdlDisplay::SdlError("Cannot allocate more memory.");
+    throw SdlError("Cannot allocate more memory.");
 }
 
 SdlDisplay::~SdlDisplay()
@@ -91,7 +91,7 @@ void		SdlDisplay::initFond(int width, int height)
   _fond = SDL_CreateRGBSurface(SDL_HWSURFACE, width * SBLOCK,
 			       height * SBLOCK, 32, 0, 0, 0, 0);
   if (!ground || !_fond)
-    throw SdlDisplay::SdlError("Cannot load images\n");
+    throw SdlError("Cannot load images\n");
   i = 0;
   while (i < width)
     {
@@ -101,7 +101,7 @@ void		SdlDisplay::initFond(int width, int height)
 	  off.x = (i * SBLOCK);
 	  off.y = (j * SBLOCK);
 	  if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
-	    throw SdlDisplay::SdlError("Unexpected error while drawing\n");
+        throw SdlError("Unexpected error while drawing\n");
 	  ++j;
 	}
       ++i;
@@ -110,7 +110,7 @@ void		SdlDisplay::initFond(int width, int height)
   off.y = 0;
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0 ||
       SDL_Flip(_screen) < 0)
-    throw SdlDisplay::SdlError("Unexpected error while drawing\n");
+    throw SdlError("Unexpected error while drawing\n");
   SDL_FreeSurface(ground);
 }
 
@@ -122,7 +122,7 @@ void		SdlDisplay::init(int width, int height)
 			     SDL_HWSURFACE | SDL_DOUBLEBUF);
   if (!_screen)
     {
-      throw SdlDisplay::SdlError(SDL_GetError());
+      throw SdlError(SDL_GetError());
     }
   else
     {
@@ -131,11 +131,27 @@ void		SdlDisplay::init(int width, int height)
       _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
       _surfaces[POWERUP] = IMG_Load("./images/apple.png");
       if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
-	throw SdlDisplay::SdlError("Cannot load images.");
+    throw SdlError("Cannot load images.");
     }
 }
 
 extern "C" IDisplay *getDisplay(void)
 {
   return new SdlDisplay();
+}
+
+
+///////////
+// Error //
+///////////
+SdlDisplay::SdlError::SdlError(const std::string &error) : NibblerException(error)
+{
+}
+
+const std::string SdlDisplay::SdlError::getMessage(void) const
+{
+    std::stringstream   ss;
+
+    ss << "SdlDisplay : " << this->getError();
+    return ss.str();
 }

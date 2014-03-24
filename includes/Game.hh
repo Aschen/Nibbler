@@ -2,6 +2,8 @@
 #define GAME_HH
 
 #include "Nibbler.hh"
+#include "IDisplay.hh"
+#include "DLLoader.hh"
 #include "AObject.hh"
 #include "NibblerException.hh"
 #include "Snake.hh"
@@ -13,7 +15,8 @@ public:
     typedef void (Game::*methodPtr)(const AObject *obj);
 private:
     const Coord             _map;
-    const std::string       _lib;
+    DLLoader<IDisplay, IDisplay*(*)()>        _dyn;
+    IDisplay                *_display;
     std::vector<AObject*>   _objects;
 public:
     Game(const Coord &map, const std::string &library);

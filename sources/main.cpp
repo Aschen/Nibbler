@@ -5,17 +5,21 @@
 
 int     main(int ac, char **av)
 {
-    try
+    if (ac == 2)
     {
-        Game        nibbler(Coord(50, 50), "lib_nibbler_sdl.so");
+        try
+        {
+            Game        nibbler(Coord(10, 10), av[1]);
 
-        nibbler.startMenu();
+            nibbler.startMenu();
+        }
+        catch (const NibblerException &e)
+        {
+            std::cerr << e.getMessage() << std::endl;
+        }
     }
-    catch (const NibblerException &e)
-    {
-        std::cerr << e.getMessage() << std::endl;
-    }
-
+    else
+        std::cout << "Usage : " << av[0] << " <library> " << std::endl;
     return 0;
 }
 /*
@@ -27,18 +31,18 @@ int		main(int ac , char **av)
       IDisplay	*Display;
 
       try
-	{
-	  Display = Dyn.getInstance("getDisplay");
-	  Display->init(10,10);
-	  while (Display->getKey() != QUIT)
-	    {
-	      usleep(200);
-	    }
-	}
+    {
+      Display = Dyn.getInstance("getDisplay");
+      Display->init(10,10);
+      while (Display->getKey() != QUIT)
+        {
+          usleep(200);
+        }
+    }
       catch (NibblerException &e)
-	{
-	  std::cerr << "Error:" << e.getMessage() << std::endl;
-	}
+    {
+      std::cerr << "Error:" << e.getMessage() << std::endl;
+    }
     }
   return 0;
 }
