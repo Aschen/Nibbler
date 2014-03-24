@@ -13,7 +13,7 @@ CXX	=	clang++
 SRCS	=	sources/main.cpp \
 		sources/Snake.cpp \
 		sources/Wall.cpp \
-		sources/Fruit.cpp \
+		sources/Powerup.cpp \
 		sources/NibblerException.cpp \
 		sources/Game.cpp \
 

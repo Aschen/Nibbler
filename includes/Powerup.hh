@@ -1,11 +1,11 @@
-#ifndef FRUIT_HH
-#define FRUIT_HH
+#ifndef POWERUP_HH
+#define POWERUP_HH
 
 #include "Nibbler.hh"
 #include "AObject.hh"
 #include "NibblerException.hh"
 
-class   Fruit : public AObject
+class   Powerup : public AObject
 {
 public:
     class   Error : public NibblerException
@@ -17,18 +17,19 @@ public:
     };
 private:
     const Coord     _mapSize;
-    Coord           _next;
     unsigned int    _full;
+    Coord           _next;
 public:
-    Fruit(const Coord &mapSize);
-    ~Fruit(void);
-    int    addFruit(Object obj);
-    Coord    getNextFruit(void);
+    Powerup(const Coord &mapSize);
+    ~Powerup(void);
+    int             addPowerup(Object obj);
+    Coord           &getNextPowerup(void);
+    void            clearPowerup(void);
 public:
     // AObject
     const std::vector<Coord>    &getCoord(void) const;
-    Object getType(void) const;
-    void     dump(void) const;
+    Object                      getType(void) const;
+    void                        dump(void) const;
 };
 
-#endif // FRUIT_HH
+#endif // POWERUP_HH

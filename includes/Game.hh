@@ -8,7 +8,7 @@
 #include "NibblerException.hh"
 #include "Snake.hh"
 #include "Wall.hh"
-#include "Fruit.hh"
+#include "Powerup.hh"
 
 class   Game
 {
@@ -17,20 +17,25 @@ public:
 private:
     const Coord             _map;
     DLLoader<IDisplay, IDisplay*(*)()>        _dyn;
+    Flag                    _flag;
+    Direction               _direction;
     IDisplay                *_display;
     std::vector<AObject*>   _objects;
-    unsigned int            _flag;
 public:
     Game(const Coord &map, const std::string &library);
     ~Game(void);
     Object      lookup(const Coord &coord) const;
-    void        startGame(Snake &python, Fruit &powerup);
+    void        startGame(void);
     void        startMenu(void);
     void        dumpObjects(void) const;
-    AObject *getSnake(void) const;
-    unsigned int    getFlag(void) const;
-    void        setFlag(unsigned int flag);
-    IDisplay    *getDisplay(void) const;
+    void        clearGame(void);
+//GETTER SETTER
+public:
+    AObject         *getObject(Object type) const;
+    Flag            getFlag(void) const;
+    IDisplay        *getDisplay(void) const;
+    void            setFlag(Flag flag);
+    void            setDirection(Key key);
 };
 
 void        *hookKeys(void *data);

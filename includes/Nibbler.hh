@@ -37,5 +37,11 @@ typedef enum e_direct
     MLEFT,
     MRIGHT
 }            Direction;
+typedef enum e_flag
+{
+    EXIT = 0,
+    MENU,
+    PLAY
+}            Flag;
 
 #endif // NIBBLER_HH

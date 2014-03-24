@@ -1,7 +1,7 @@
 #include "Snake.hh"
 
 Snake::Snake(const Coord &mapSize, const Coord &start)
-    : AObject(SNAKE), _map(mapSize), _size(4), _direction(MUP)
+    : AObject(SNAKE), _map(mapSize), _size(4)
 {
     unsigned int     i = 0;
 
@@ -18,18 +18,16 @@ Snake::Snake(const Coord &mapSize, const Coord &start)
     _tail = *(--(_coords.end()));
 }
 
-Snake::~Snake()
+Snake::~Snake(void)
 {
 }
 
-Object Snake::move(Object obj)
+void Snake::move(void)
 {
     std::vector<Coord>::iterator    it = _coords.begin();
-    Coord       tmp;
-    Coord       last;
-    Object      ret;
+    Coord                           tmp;
+    Coord                           last;
 
-    ret = this->verifMove(obj);
     last = *it;
     _tail = *(--(_coords.end()));
     while (it != _coords.end())
@@ -40,7 +38,6 @@ Object Snake::move(Object obj)
         ++it;
     }
     *(_coords.begin()) = _head;
-    return ret;
 }
 
 void Snake::grow(void)
@@ -48,10 +45,10 @@ void Snake::grow(void)
     _coords.push_back(Coord(_tail.first, _tail.second));
 }
 
-const Coord &Snake::getNextMove(void)
+const Coord &Snake::getNextMove(Direction direction)
 {
     _head = *(_coords.begin());
-    switch (_direction)
+    switch (direction)
     {
     case MUP:
         _head.second -= 1;
@@ -67,28 +64,6 @@ const Coord &Snake::getNextMove(void)
         break;
     }
     return _head;
-}
-
-void Snake::setDirection(Key direction)
-{
-    _direction = static_cast<Direction>(direction);
-}
-
-Object Snake::verifMove(Object obj)
-{
-    switch (obj)
-    {
-    case SNAKE:
-    case WALL:
-        throw Error("Game over !");
-        break;
-    case POWERUP:
-        this->grow();
-        break;
-    case EMPTY:
-        break;
-    }
-    return obj;
 }
 
 void Snake::dump(void) const
