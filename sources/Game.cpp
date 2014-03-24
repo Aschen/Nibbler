@@ -16,17 +16,12 @@ Object Game::lookup(const Coord &search) const
     std::vector<AObject*>::const_iterator     it = _objects.begin();
     Object      result = EMPTY;
 
-    std::cout << "Lookup in " << search.first << "," << search.second << std::endl << "search";
     while (it != _objects.end())
     {
         if (find((*it)->getCoord().begin(), (*it)->getCoord().end(), search) != (*it)->getCoord().end())
-        {
            result = (*it)->getType();
-           std::cout << "Object found ! => " << result << std::endl;
-        }
         ++it;
     }
-    std::cout << "Return result" << std::endl;
     return result;
 }
 
@@ -41,9 +36,7 @@ void Game::startGame(void)
     fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
     while (_flag >= PLAY)
     {
-        std::cout << "Boucle start" << std::endl;
         snakeHead = this->lookup(python->getNextMove(_direction));
-        std::cout << "Snake position updated !" << std::endl;
         switch (snakeHead)
         {
         case WALL:
@@ -52,17 +45,13 @@ void Game::startGame(void)
             _flag = MENU;
             break;
         case POWERUP:
-            std::cout << "Snake eat a fruit" << std::endl;
             python->grow();
             fruit->clearPowerup();
             while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-            std::cout << "New fruit successfully added" << std::endl;
         case EMPTY:
             python->move();
-            std::cout << "Objects list: " << std::endl;
             this->dumpObjects();
             _display->display(_objects);
-            std::cout << "Display ok !" << std::endl;
         }
         usleep(500000);
     }
@@ -86,6 +75,7 @@ void Game::startMenu(void)
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
         std::cout << "Initialisation du jeux !" << std::endl;
         this->dumpObjects();
+        _display->display(_objects);
         sleep(2);
         std::cout << "Demarrage de la partie :D" << std::endl;
         this->startGame();
@@ -104,6 +94,7 @@ void Game::clearGame(void)
         ++it;
     }
     _objects.clear();
+    _direction = MUP;
 }
 
 void Game::dumpObjects(void) const
@@ -163,10 +154,14 @@ void *hookKeys(void *data)
         if (key == QUIT)
         {
             nibbler->setFlag(EXIT);
+            std::cout << "Key EXIT pressed" << std::endl;
             break;
         }
         if (key <= RIGHT && nibbler->getFlag() == PLAY)
+        {
+            std::cout << "Key " << key << " pressed" << std::endl;
             nibbler->setDirection(key);
+        }
     }
     pthread_exit(0);
 }

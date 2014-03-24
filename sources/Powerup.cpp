@@ -13,33 +13,24 @@ Powerup::~Powerup(void)
 int Powerup::addPowerup(Object obj)
 {
     if (obj != EMPTY)
-    {
-        std::cout << "Invalid new Powerup position" << std::endl;
         return 1;
-    }
-    std::cout << "Add Powerup in " << _next.first << "," << _next.second << std::endl;
     _coords.push_back(_next);
     _full = 0;
-    std::cout << "New Powerup successfully added ! " << std::endl;
     return 0;
 }
 
 Coord &Powerup::getNextPowerup(void)
 {
-    std::cout << "Find a new Powerup position" << std::endl;
     if (++_full > _mapSize.first * _mapSize.second)
         throw Error("Can't place a powerup");
     _next.first = rand() % _mapSize.first;
     _next.second = rand() % _mapSize.second;
-    std::cout << "New Powerup position finded ! " << _next.first << "," << _next.second << std::endl;
     return _next;
 }
 
 void Powerup::clearPowerup(void)
 {
-    std::cout << "Remove old Powerup" << std::endl;
     _coords.clear();
-    std::cout << "Old Powerup deleted !" << std::endl;
 }
 
 //////////////
