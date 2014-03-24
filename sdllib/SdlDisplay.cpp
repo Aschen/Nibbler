@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Mon Mar 24 12:20:28 2014 brunne-r
+// Last update Mon Mar 24 16:45:27 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -37,17 +37,32 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
   SDL_Surface	*actu;
 
   std::vector<AObject*>::const_iterator	it, end;
+  std::vector<Coord>::const_iterator a, z;
 
   end = map.end();
   it = map.begin();
+  off.x = 0;
+  off.y = 0;
+  if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0)
+    throw SdlError("Unexpected error while drawing\n");
   while (it < end)
     {
       c = ((*it)->getCoord());
-      off.x = c[0].first * SBLOCK;
-      off.y = c[0].second * SBLOCK;
+      a = c.begin();
+      z = c.end();
       actu = _surfaces[(*it)->getType()];
+      while (a < z)
+	{
+	  off.x = (*a).first * SBLOCK;
+	  off.y = (*a).second * SBLOCK;
+	  if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
+	    throw SdlError("Unexpected error while drawing\n");
+	  ++a;
+	}
       ++it;
     }
+  if (SDL_Flip(_screen) < 0)
+    throw SdlError("Undexpected error while drawing");
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -101,7 +116,7 @@ void		SdlDisplay::initFond(int width, int height)
 	  off.x = (i * SBLOCK);
 	  off.y = (j * SBLOCK);
 	  if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
-        throw SdlError("Unexpected error while drawing\n");
+	    throw SdlError("Unexpected error while drawing\n");
 	  ++j;
 	}
       ++i;
