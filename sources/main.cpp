@@ -9,7 +9,7 @@ int     main(int ac, char **av)
     {
         try
         {
-            Game        nibbler(Coord(10, 10), av[1]);
+            Game        nibbler(Coord(15, 15), av[1]);
 
             nibbler.startMenu();
         }

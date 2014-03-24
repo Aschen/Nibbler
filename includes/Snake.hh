@@ -26,8 +26,8 @@ private:
 public:
     Snake(const Coord &mapSize, const Coord &start);
     ~Snake(void);
-    void     move(Object obj);
-    void     setDirection(Direction direction);
+    Object     move(Object obj);
+    void     setDirection(Key direction);
     void     grow(void);
     const Coord     &getNextMove(void);
 
@@ -37,7 +37,7 @@ public:
     Object getType(void) const;
     void     dump(void) const;
 private:
-    void     verifMove(Object obj);
+    Object verifMove(Object obj);
 };
 
 #endif // SNAKE_HH

@@ -8,6 +8,7 @@
 #include "NibblerException.hh"
 #include "Snake.hh"
 #include "Wall.hh"
+#include "Fruit.hh"
 
 class   Game
 {
@@ -22,9 +23,9 @@ public:
     Game(const Coord &map, const std::string &library);
     ~Game(void);
     Object      lookup(const Coord &coord) const;
-    void        startGame(Snake &python);
+    void        startGame(Snake &python, Fruit &powerup);
     void        startMenu(void);
-    void        dump(void) const;
+    void        dumpObjects(void) const;
 };
 
 #endif // GAME_HH
