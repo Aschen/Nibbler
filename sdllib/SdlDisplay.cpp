@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Mon Mar 24 17:15:48 2014 brunne-r
+// Last update Mon Mar 24 17:45:41 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -142,7 +142,7 @@ void		SdlDisplay::init(int width, int height)
   else
     {
       initFond(width, height);
-      _surfaces[WALL] = IMG_Load("./images/ground.png");
+      _surfaces[WALL] = IMG_Load("./images/wood.png");
       _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
       _surfaces[POWERUP] = IMG_Load("./images/apple.png");
       if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
