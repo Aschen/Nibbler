@@ -22,32 +22,49 @@ Object Game::lookup(const Coord &search) const
            result = (*it)->getType();
         ++it;
     }
-    std::cout << "Object in " << search.first << "," << search.second << " is " << result << std::endl;
     return result;
+}
+
+void *hookKeys(void *data)
+{
+    Snake   *python = NULL;
+    Game    *nibbler = NULL;
+    Key     key;
+
+    nibbler = reinterpret_cast<Game*>(data);
+    python = reinterpret_cast<Snake*>(nibbler->getSnake());
+    while (nibbler->getFlag())
+    {
+        key = nibbler->getDisplay()->getKey();
+        if (key == QUIT)
+            nibbler->setFlag(0);
+        if (key <= RIGHT)
+            python->setDirection(key);
+    }
+    pthread_exit(0);
 }
 
 void Game::startGame(Snake &python, Fruit &powerup)
 {
-    int flag = 1;
     Key key;
+    pthread_t   keyThread;
+    _flag = 1;
 
-    while (flag)
+    pthread_create(&keyThread, NULL, &hookKeys, this);
+    while (_flag)
     {
         try
         {
             if (python.move(this->lookup(python.getNextMove())) == POWERUP)
                 while (powerup.addFruit(this->lookup(powerup.getNextFruit())));
-            python.dump();            
+            this->dumpObjects();
             _display->display(_objects);
-            sleep(1);
-            if ((key = _display->getKey()) == QUIT)
-                flag = 0;
-            if (key <= RIGHT)
-                python.setDirection(key);
+            usleep(500000);
         }
         catch (const Snake::Error &e)
         {
             std::cout << "startGame() : " << e.getMessage() << std::endl;
+            pthread_kill(keyThread, SIGKILL);
             this->startMenu();
         }
     }
@@ -84,4 +101,24 @@ void Game::dumpObjects(void) const
         std::cout << std::endl;
         ++it;
     }
+}
+
+AObject *Game::getSnake(void) const
+{
+    return _objects[0];
+}
+
+unsigned int Game::getFlag() const
+{
+    return _flag;
+}
+
+void Game::setFlag(unsigned int flag)
+{
+    _flag = flag;
+}
+
+IDisplay *Game::getDisplay() const
+{
+    return _display;
 }

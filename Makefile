@@ -17,9 +17,9 @@ SRCS	=	sources/main.cpp \
 		sources/NibblerException.cpp \
 		sources/Game.cpp \
 
-CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC
+CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC -lpthread
 
-LDLIBS =	-ldl -lSDL -lSDL_image
+LDLIBS =	-ldl -lSDL -lSDL_image -lpthread
 
 OBJS	=	$(SRCS:.cpp=.o)
 

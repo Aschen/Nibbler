@@ -13,7 +13,8 @@ int Fruit::addFruit(Object obj)
 {
     if (obj != EMPTY)
         return 1;
-    _coords.clear();
+    std::cout << "Add fruit in " << _next.first << "," << _next.second << std::endl;
+    _coords.erase(_coords.begin(), _coords.end());
     _coords.push_back(_next);
     _full = 0;
     return 0;

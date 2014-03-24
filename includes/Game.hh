@@ -19,6 +19,7 @@ private:
     DLLoader<IDisplay, IDisplay*(*)()>        _dyn;
     IDisplay                *_display;
     std::vector<AObject*>   _objects;
+    unsigned int            _flag;
 public:
     Game(const Coord &map, const std::string &library);
     ~Game(void);
@@ -26,6 +27,11 @@ public:
     void        startGame(Snake &python, Fruit &powerup);
     void        startMenu(void);
     void        dumpObjects(void) const;
+    AObject *getSnake(void) const;
+    unsigned int    getFlag(void) const;
+    void        setFlag(unsigned int flag);
+    IDisplay    *getDisplay(void) const;
 };
 
+void        *hookKeys(void *data);
 #endif // GAME_HH

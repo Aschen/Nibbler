@@ -8,6 +8,8 @@
 #include <iostream>
 #include <algorithm>
 #include <unistd.h>
+#include <pthread.h>
+#include <signal.h>
 
 #define	SBLOCK	40
 

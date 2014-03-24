@@ -66,7 +66,6 @@ const Coord &Snake::getNextMove(void)
         _head.first += 1;
         break;
     }
-    std::cout << "Next move in " << _head.first << "," << _head.second << std::endl;
     return _head;
 }
 
@@ -87,7 +86,6 @@ Object Snake::verifMove(Object obj)
         this->grow();
         break;
     case EMPTY:
-        std::cout << "Move is ok" << std::endl;
         break;
     }
     return obj;
