@@ -9,19 +9,18 @@
 #include <algorithm>
 #include <unistd.h>
 
-#define MUP(c)     -1
-#define MDOWN(c)   1
-#define MLEFT(c)   -1
-#define MRIGHT(c)  1
+#define	SBLOCK	40
 
 typedef std::pair<unsigned int, unsigned int>   Coord;
 typedef enum e_key
 {
-    ESC = 0,
+    UP = 0,
+    DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    QUIT,
+    OTHERS
 }            Key;
-
 typedef enum e_object
 {
     WALL = 0,
@@ -29,7 +28,6 @@ typedef enum e_object
     POWERUP,
     EMPTY
 }            Object;
-
 typedef enum e_direct
 {
     MUP = 0,

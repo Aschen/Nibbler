@@ -132,4 +132,3 @@ const std::string Snake::Error::getMessage(void) const
     ss << "Snake : " << this->getError();
     return ss.str();
 }
-

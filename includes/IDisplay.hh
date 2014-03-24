@@ -1,11 +1,17 @@
 #ifndef IDISPLAY_H
 #define IDISPLAY_H
 
-class   IDisplay
+# include <vector>
+# include "Nibbler.hh"
+# include "AObject.hh"
+
+class		IDisplay
 {
-    virtual ~IDisplay(void) {}
-    virtual displayMap(char **map) = 0;
-    virtual getKeys(void) = 0;
+public:
+  virtual	~IDisplay() {}
+  virtual void	init(int width, int height) = 0;
+  virtual void	display(const std::vector<AObject*> &map) const = 0;
+  virtual Key	getKey(void) const = 0;
 };
 
 #endif // IDISPLAY_H
