@@ -17,11 +17,13 @@ public:
     };
 private:
     const Coord     _mapSize;
+    Coord           _next;
+    unsigned int    _full;
 public:
     Fruit(const Coord &mapSize);
     ~Fruit(void);
-    void    addFruit(const Coord &coord);
-    void    getNextFruit(void);
+    int    addFruit(Object obj);
+    Coord    getNextFruit(void);
 public:
     // AObject
     const std::vector<Coord>    &getCoord(void) const;

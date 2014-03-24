@@ -30,13 +30,15 @@ void Wall::addWall(const Coord &coord)
 void Wall::dump(void) const
 {
     std::vector<Coord>::const_iterator   it = _coords.begin();
+    unsigned int    count = 0;
 
-    std::cout << "Walls" << std::endl;
     while (it != _coords.end())
     {
-        std::cout << "[" << it->first << "," << it->second << "]" << std::endl;
+        ++count;
+//        std::cout << "[" << it->first << "," << it->second << "]" << std::endl;
         ++it;
     }
+    std::cout << "Walls : " << count << std::endl;
 }
 
 ////////////////

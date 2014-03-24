@@ -22,13 +22,14 @@ Snake::~Snake()
 {
 }
 
-void Snake::move(Object obj)
+Object Snake::move(Object obj)
 {
     std::vector<Coord>::iterator    it = _coords.begin();
     Coord       tmp;
     Coord       last;
+    Object      ret;
 
-    this->verifMove(obj);
+    ret = this->verifMove(obj);
     last = *it;
     _tail = *(--(_coords.end()));
     while (it != _coords.end())
@@ -39,6 +40,7 @@ void Snake::move(Object obj)
         ++it;
     }
     *(_coords.begin()) = _head;
+    return ret;
 }
 
 void Snake::grow(void)
@@ -68,12 +70,12 @@ const Coord &Snake::getNextMove(void)
     return _head;
 }
 
-void Snake::setDirection(Direction direction)
+void Snake::setDirection(Key direction)
 {
-    _direction = direction;
+    _direction = static_cast<Direction>(direction);
 }
 
-void Snake::verifMove(Object obj)
+Object Snake::verifMove(Object obj)
 {
     switch (obj)
     {
@@ -88,6 +90,7 @@ void Snake::verifMove(Object obj)
         std::cout << "Move is ok" << std::endl;
         break;
     }
+    return obj;
 }
 
 void Snake::dump(void) const

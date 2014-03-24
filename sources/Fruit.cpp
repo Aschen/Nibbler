@@ -9,12 +9,23 @@ Fruit::~Fruit(void)
 {
 }
 
-void Fruit::addFruit(const Coord &coord)
+int Fruit::addFruit(Object obj)
 {
+    if (obj != EMPTY)
+        return 1;
+    _coords.clear();
+    _coords.push_back(_next);
+    _full = 0;
+    return 0;
 }
 
-void Fruit::getNextFruit(void)
+Coord Fruit::getNextFruit(void)
 {
+    if (++_full > _mapSize.first * _mapSize.second)
+        throw Error("Can't place a powerup");
+    _next.first = rand() % _mapSize.first;
+    _next.second = rand() % _mapSize.second;
+    return _next;
 }
 
 //////////////
