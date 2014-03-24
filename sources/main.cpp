@@ -7,7 +7,7 @@ int     main(int ac, char **av)
 {
     try
     {
-        Game        nibbler(Coord(50, 50), "lib_nibbler_sdl.so");
+        Game        nibbler(Coord(50, 50), "/sdllib/libsdl.so");
 
         nibbler.startMenu();
     }
