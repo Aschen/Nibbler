@@ -5,7 +5,7 @@
 ## Login   <brunne-r@epitech.net>
 ##
 ## Started on  Sat Mar 22 15:55:59 2014 brunne-r
-## Last update Mon Mar 24 12:42:07 2014 brunne-r
+## Last update Mon Mar 24 17:18:37 2014 brunne-r
 ##
 
 ##
@@ -16,7 +16,7 @@ CXX	=	clang++
 
 CXXFLAGS=	-fPIC -Wall -Wextra -W -I ../includes
 
-NAME	=	libncurses.so
+NAME	=	../libncurses.so
 
 SRCS	=	NcursesDisplay.cpp \
 		../sources/NibblerException.cpp

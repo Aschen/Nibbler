@@ -5,7 +5,7 @@
 ## Login   <brunne-r@epitech.net>
 ##
 ## Started on  Sat Mar 22 15:55:59 2014 brunne-r
-## Last update Sat Mar 22 16:55:24 2014 brunne-r
+## Last update Mon Mar 24 17:18:57 2014 brunne-r
 ##
 
 ##
@@ -16,7 +16,7 @@ CXX	=	clang++
 
 CXXFLAGS=	-fPIC -Wall -Wextra -W `sdl-config --cflags` -I ../includes
 
-NAME	=	libsdl.so
+NAME	=	../libsdl.so
 
 SRCS	=	SdlDisplay.cpp \
 		../sources/NibblerException.cpp
