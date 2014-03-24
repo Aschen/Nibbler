@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Mon Mar 24 13:44:33 2014 brunne-r
+// Last update Mon Mar 24 17:33:29 2014 brunne-r
 //
 
 #include "NcursesDisplay.hh"
@@ -17,6 +17,9 @@ NcursesDisplay::NcursesDisplay()
       keypad(stdscr, TRUE) == ERR ||
       noecho() == ERR)
     throw NcursesDisplay::NcursesError("Unable to init Ncurses.");
+  _chars[SNAKE] = "\033[32m  \033[00m";
+  _chars[WALL] = "\033[35m  \033[00m";
+  _chars[POWERUP] = "\033[31m  \033[00m";
 }
 
 NcursesDisplay::~NcursesDisplay()
@@ -39,7 +42,29 @@ void NcursesDisplay::init(int width, int height)
 
 void NcursesDisplay::display(const std::vector<AObject*> &map) const
 {
-  (void)map;
+  std::vector<Coord>	c;
+
+  std::vector<AObject*>::const_iterator	it, end;
+  std::vector<Coord>::const_iterator a, z;
+
+  end = map.end();
+  it = map.begin();
+  while (it < end)
+    {
+      c = ((*it)->getCoord());
+      a = c.begin();
+      z = c.end();
+      while (a < z)
+	{
+	  if (wmove(_win, (*a).second + 1, (*a).first * 2 + 1) == ERR ||
+	      wprintw(_win, _chars[(*it)->getType()]) == ERR)
+	    throw NcursesError("Unexpected error while drawing\n");
+	  ++a;
+	}
+      ++it;
+    }
+  if (wrefresh(_win) == ERR)
+    throw NcursesError("Undexpected error while drawing");
 }
 
 Key	NcursesDisplay::getKey(void) const
