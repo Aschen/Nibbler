@@ -8,11 +8,16 @@
 ## Started on  21/03/2014 12:43
 ##
 
-CC	=	clang++
+CXX	=	g++
 
 SRCS	=	sources/main.cpp \
+		sources/Snake.cpp \
+		sources/Wall.cpp \
+		sources/Fruit.cpp \
+		sources/NibblerException.cpp \
+		sources/Game.cpp \
 
-CXXFLAGS=	-Wall -W -Wextra
+CXXFLAGS=	-Wall -W -Wextra -Iincludes
 
 LDFLAGS	=	-ldl
 
@@ -23,7 +28,7 @@ NAME	=	nibbler
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+	$(CXX) -o $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)

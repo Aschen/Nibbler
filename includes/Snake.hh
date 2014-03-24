@@ -1,21 +1,43 @@
 #ifndef SNAKE_HH
 #define SNAKE_HH
 
-#include <string>
-#include <vector>
+#include "Nibbler.hh"
+#include "AObject.hh"
+#include "NibblerException.hh"
 
-typedef Coord std::pair<unsigned int, unsigned int>;
-
-class   Snake
+class   Snake : public AObject
 {
-private:
-    std::vector<Coord>    _corpse;
 public:
-    Snake(char **map, Coord size);
+    class   Error : public NibblerException
+    {
+    public:
+        Error(const std::string &error);
+        ~Error(void) throw() {}
+        const std::string   getMessage(void) const;
+    };
+
+private:
+    const Coord     _map;
+    unsigned int    _size;
+    Coord           _head;
+    Coord           _tail;
+    Direction       _direction;
+
+public:
+    Snake(const Coord &mapSize, const Coord &start);
     ~Snake(void);
-    void     moveUp(char **map);
-    void     moveRight(char **map);
-    void     moveLeft(char **map);
+    void     move(Object obj);
+    void     setDirection(Direction direction);
+    void     grow(void);
+    const Coord     &getNextMove(void);
+
+public:
+    // AObject
+    const std::vector<Coord>    &getCoord(void) const;
+    Object getType(void) const;
+    void     dump(void) const;
+private:
+    void     verifMove(Object obj);
 };
 
 #endif // SNAKE_HH
