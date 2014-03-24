@@ -5,32 +5,37 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Sat Mar 22 16:00:07 2014 brunne-r
-// Last update Sat Mar 22 17:25:05 2014 brunne-r
+// Last update Mon Mar 24 13:31:22 2014 brunne-r
 //
 
 #include <iostream>
 #include <cstdlib>
 #include "Nibbler.hh"
+#include "NibblerException.hh"
 #include "DLLoader.hh"
 #include "IDisplay.hh"
 
-int		main(void)
+int		main(int ac , char **av)
 {
-  DLLoader<IDisplay, IDisplay*(*)()>	Dyn("./sdllib/libsdl.so");
-  IDisplay	*Display;
+  if (ac >= 2)
+    {
+      DLLoader<IDisplay, IDisplay*(*)()>	Dyn(av[1]);
+      IDisplay	*Display;
 
-  try
-    {
-      Display = Dyn.getInstance("getDisplay");
-      Display->init(30,20);
-      while (Display->getKey() != QUIT)
+      try
 	{
-	  usleep(200);
+	  Display = Dyn.getInstance("getDisplay");
+	  Display->init(10,10);
+	  usleep(200000);
+	  while (Display->getKey() != QUIT)
+	    {
+	      usleep(200);
+	    }
 	}
-    }
-  catch (...)
-    {
-      std::cerr << "Error" << std::endl;
+      catch (NibblerException &e)
+	{
+	  std::cerr << "Error:" << e.getMessage() << std::endl;
+	}
     }
   return 0;
 }

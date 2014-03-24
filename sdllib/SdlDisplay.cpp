@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Sat Mar 22 19:03:34 2014 brunne-r
+// Last update Mon Mar 24 12:20:28 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -13,19 +13,41 @@
 SdlDisplay::SdlDisplay()
 {
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
-    {
-      throw SdlDisplay::SdlError(SDL_GetError());
-    }
+    throw SdlDisplay::SdlError(SDL_GetError());
+
+  _surfaces = new SDL_Surface*[3];
+  if (!_surfaces)
+    throw SdlDisplay::SdlError("Cannot allocate more memory.");
 }
 
 SdlDisplay::~SdlDisplay()
 {
+  SDL_FreeSurface(_surfaces[WALL]);
+  SDL_FreeSurface(_surfaces[SNAKE]);
+  SDL_FreeSurface(_surfaces[POWERUP]);
+  delete[] _surfaces;
   SDL_FreeSurface(_fond);
   SDL_Quit();
 }
 
 void		SdlDisplay::display(const std::vector<AObject*> &map) const
 {
+  std::vector<Coord>	c;
+  SDL_Rect	off;
+  SDL_Surface	*actu;
+
+  std::vector<AObject*>::const_iterator	it, end;
+
+  end = map.end();
+  it = map.begin();
+  while (it < end)
+    {
+      c = ((*it)->getCoord());
+      off.x = c[0].first * SBLOCK;
+      off.y = c[0].second * SBLOCK;
+      actu = _surfaces[(*it)->getType()];
+      ++it;
+    }
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -105,6 +127,11 @@ void		SdlDisplay::init(int width, int height)
   else
     {
       initFond(width, height);
+      _surfaces[WALL] = IMG_Load("./images/ground.png");
+      _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
+      _surfaces[POWERUP] = IMG_Load("./images/apple.png");
+      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
+	throw SdlDisplay::SdlError("Cannot load images.");
     }
 }
 

@@ -15,8 +15,9 @@
 CXX	=	clang++
 
 SRCS	=	sources/main.cpp \
+		sources/NibblerException.cpp \
 
-CXXFLAGS=	-Wall -W -Wextra -I ./includes
+CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC
 
 LDLIBS =	-ldl -lSDL -lSDL_image
 
@@ -30,12 +31,13 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	$(CXX) -o $(NAME) $(OBJS) $(LDLIBS)
 	make -C ./sdllib/
-
+	make -C ./ncurseslib/
 clean:
 	rm -f $(OBJS)
 
 fclean:	clean
 	rm -f $(NAME)
 	make fclean -C ./sdllib/
+	make fclean -C ./ncurseslib/
 
 re: fclean all
