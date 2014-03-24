@@ -15,3 +15,4 @@ const std::string NibblerException::getMessage() const
 
     ss << "Error : " << _error;
     return ss.str();
+}

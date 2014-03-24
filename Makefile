@@ -8,8 +8,7 @@
 ## Started on  21/03/2014 12:43
 ##
 
-<<<<<<< HEAD
-CXX	=	g++
+CXX	=	clang++
 
 SRCS	=	sources/main.cpp \
 		sources/Snake.cpp \
@@ -18,19 +17,7 @@ SRCS	=	sources/main.cpp \
 		sources/NibblerException.cpp \
 		sources/Game.cpp \
 
-CXXFLAGS=	-Wall -W -Wextra -Iincludes
-=======
-##
-## CORE
-##
-
-CXX	=	clang++
-
-SRCS	=	sources/main.cpp \
-		sources/NibblerException.cpp \
-
 CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC
->>>>>>> c64b610d051bb4c4402f533c688a70ca75735a88
 
 LDLIBS =	-ldl -lSDL -lSDL_image
 
@@ -42,14 +29,9 @@ NAME	=	nibbler
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-<<<<<<< HEAD
-	$(CXX) -o $(NAME) $(OBJS)
-
-=======
 	$(CXX) -o $(NAME) $(OBJS) $(LDLIBS)
 	make -C ./sdllib/
 	make -C ./ncurseslib/
->>>>>>> c64b610d051bb4c4402f533c688a70ca75735a88
 clean:
 	rm -f $(OBJS)
 
