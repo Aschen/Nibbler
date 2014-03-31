@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Mon Mar 24 12:19:12 2014 brunne-r
+// Last update Mon Mar 31 14:51:10 2014 brunne-r
 //
 
 #ifndef SDLDISPLAY_H
@@ -13,6 +13,7 @@
 
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
+# include <SDL/SDL_rotozoom.h>
 # include "AObject.hh"
 # include "DLLoader.hh"
 # include "IDisplay.hh"
@@ -31,7 +32,10 @@ private:
   SDL_Surface	*_screen;
   SDL_Surface	*_fond;
   SDL_Surface	**_surfaces;
+  SDL_Surface	*_extras[2];
 
+  SDL_Surface*	headDirection(const std::vector<Coord> &c) const;
+  SDL_Surface*	queueDirection(const std::vector<Coord> &c) const;
   void		initFond(int width, int height);
 public:
   SdlDisplay();
