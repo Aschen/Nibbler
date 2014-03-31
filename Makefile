@@ -17,7 +17,7 @@ SRCS	=	sources/main.cpp \
 		sources/NibblerException.cpp \
 		sources/Game.cpp \
 
-CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC -lpthread
+CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC
 
 LDLIBS =	-ldl -lSDL -lSDL_image -lpthread
 
