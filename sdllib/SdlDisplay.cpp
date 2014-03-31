@@ -5,15 +5,13 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Mon Mar 31 16:09:05 2014 brunne-r
+// Last update Mon Mar 31 16:35:00 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
 
 SdlDisplay::SdlDisplay()
 {
-    throw SdlError("toto");
-
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
     throw SdlError(SDL_GetError());
 

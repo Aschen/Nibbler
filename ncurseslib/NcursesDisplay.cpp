@@ -5,22 +5,23 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Mon Mar 31 16:08:35 2014 brunne-r
+// Last update Mon Mar 31 17:28:54 2014 brunne-r
 //
 
 #include "NcursesDisplay.hh"
 
 NcursesDisplay::NcursesDisplay()
 {
+  std::cerr << "init" << std::endl;
+  initscr();
   std::cout << "Start init" << std::endl;
-  if (initscr() == NULL ||
-      cbreak() == ERR ||
-      keypad(stdscr, TRUE) == ERR ||
-      noecho() == ERR ||
-      start_color() == ERR)
+  if (initscr() == NULL || !printf("1") ||
+      cbreak() == ERR || !printf("2") ||
+      keypad(stdscr, TRUE) == ERR || !printf("3") ||
+      noecho() == ERR || !printf("4") ||
+      start_color() == ERR || !printf("5"))
     {
-      std::cout << "launch error" << std::endl;
-      throw NcursesError("Unable to init Ncurses.");
+      std::cerr << "launch error" << std::endl;
     }
   std::cout << "FIN init" << std::endl;
   init_pair(SNAKE + 1, COLOR_BLACK, COLOR_GREEN);
