@@ -22,7 +22,7 @@ int Powerup::addPowerup(Object obj)
 Coord &Powerup::getNextPowerup(void)
 {
     if (++_full > _mapSize.first * _mapSize.second)
-        throw Error("Can't place a powerup");
+        throw Error("Can't place powerup");
     _next.first = rand() % _mapSize.first;
     _next.second = rand() % _mapSize.second;
     return _next;
@@ -54,15 +54,21 @@ void Powerup::dump(void) const
 /////////////
 //  Error  //
 /////////////
-Powerup::Error::Error(const std::string &error) : NibblerException(error)
+Powerup::Error::Error(const Powerup::Error &cpy) : NibblerException("Powerup")
 {
+    if (&cpy != this)
+    {
+        _msg << cpy.getMessage();
+    }
+}
+
+Powerup::Error::Error(const std::string &error) : NibblerException("Powerup")
+{
+    _msg << error << std::endl;
 }
 
 const std::string Powerup::Error::getMessage(void) const
 {
-    std::stringstream   ss;
-
-    ss << "Powerup : " << this->getError();
-    return ss.str();
+    return _msg.str();
 }
 

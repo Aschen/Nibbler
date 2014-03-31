@@ -27,7 +27,7 @@ Object Game::lookup(const Coord &search) const
 
 void Game::startGame(void)
 {
-    Snake       *python; // Class non reconnue quand appellé de _objects[SNAKE], cast ??
+    Snake       *python;
     Powerup     *fruit;
     Object      snakeHead;
 
@@ -164,4 +164,10 @@ void *hookKeys(void *data)
         }
     }
     pthread_exit(0);
+}
+
+std::ostream &operator<<(std::ostream &os, const Coord &coord)
+{
+    os << "(" << coord.first << "," << coord.second << ")";
+    return os;
 }

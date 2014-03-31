@@ -10,8 +10,12 @@ class   Snake : public AObject
 public:
     class   Error : public NibblerException
     {
+    private:
+        std::stringstream   _msg;
     public:
-        Error(const std::string &error);
+        Error(const Coord &start, const Coord &map);
+        Error(const Coord &start, const Coord &map, int size);
+        Error(const Error &cpy);
         ~Error(void) throw() {}
         const std::string   getMessage(void) const;
     };

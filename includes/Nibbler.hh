@@ -44,4 +44,6 @@ typedef enum e_flag
     PLAY
 }            Flag;
 
+std::ostream &operator<<(std::ostream &os, const Coord &coord);
+
 #endif // NIBBLER_HH

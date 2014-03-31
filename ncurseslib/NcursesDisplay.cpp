@@ -95,3 +95,23 @@ extern "C" IDisplay *getDisplay()
 {
   return new NcursesDisplay();
 }
+
+
+
+NcursesDisplay::NcursesError::NcursesError(const std::string &error) : NibblerException("NcursesDisplay")
+{
+    _msg << error << std::endl;
+}
+
+NcursesDisplay::NcursesError::NcursesError(const NcursesDisplay::NcursesError &cpy) : NibblerException("NcursesDisplay")
+{
+    if (&cpy != this)
+    {
+        _msg << this->getMessage();
+    }
+}
+
+const std::string NcursesDisplay::NcursesError::getMessage() const
+{
+    return _msg.str();
+}

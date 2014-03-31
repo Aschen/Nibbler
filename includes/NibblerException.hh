@@ -5,13 +5,12 @@
 
 class   NibblerException : public std::exception
 {
-private:
-    const std::string       _error;
+protected:
+    const std::string       _module;
 public:
-    NibblerException(const std::string &error);
+    NibblerException(const std::string &module) : _module(module) {}
     ~NibblerException(void) throw() {}
-    const std::string           &getError(void) const;
-    virtual const std::string   getMessage(void) const;
+    virtual const std::string   getMessage(void) const = 0;
 };
 
 #endif // NIBBLEREXCEPTION_HH

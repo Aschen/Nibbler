@@ -20,15 +20,24 @@ class	DLLoader
 public:
     class   Error : public NibblerException
     {
+    private:
+        std::stringstream   _msg;
     public:
-        Error(const std::string &error) : NibblerException(error) {}
+        Error(const std::string &error) : NibblerException("DLLoader")
+        {
+            _msg << error << std::endl;
+        }
+        Error(const Error &cpy) : NibblerException("DLLoader")
+        {
+            if (&cpy != this)
+            {
+                _msg << cpy.getMessage();
+            }
+        }
         ~Error(void) throw() {}
         const std::string   getMessage(void) const
         {
-            std::stringstream   ss;
-
-            ss << "DLLoader : " << this->getError();
-            return ss.str();
+            return _msg.str();
         }
     };
 private:

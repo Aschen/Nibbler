@@ -23,7 +23,7 @@ Wall::~Wall(void)
 void Wall::addWall(const Coord &coord)
 {
     if (coord.first > _mapSize.first || coord.second > _mapSize.second)
-        throw Error("Wall is outside the map");
+        throw Error(coord, _mapSize);
     _coords.push_back(coord);
 }
 
@@ -58,14 +58,21 @@ Object Wall::getType(void) const
 ///////////
 // Error //
 ///////////
-Wall::Error::Error(const std::string &error) : NibblerException(error)
+Wall::Error::Error(const Coord &wall, const Coord &map) : NibblerException("Wall")
 {
+    _msg << "Wall in " << wall.first << "," << wall.second << " is outside the map ! (";
+    _msg << map.first << "," << map.second << ")" << std::endl;
+}
+
+Wall::Error::Error(const Wall::Error &cpy) : NibblerException("Wall")
+{
+    if (&cpy != this)
+    {
+        _msg << cpy.getMessage();
+    }
 }
 
 const std::string Wall::Error::getMessage() const
 {
-    std::stringstream   ss;
-
-    ss << "Wall : " << this->getError();
-    return ss.str();
+    return _msg.str();
 }

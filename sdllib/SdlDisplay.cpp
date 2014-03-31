@@ -161,14 +161,20 @@ extern "C" IDisplay *getDisplay(void)
 ///////////
 // Error //
 ///////////
-SdlDisplay::SdlError::SdlError(const std::string &error) : NibblerException(error)
+SdlDisplay::SdlError::SdlError(const std::string &error) : NibblerException("SdlDisplay")
 {
+    _msg << error << std::endl;
+}
+
+SdlDisplay::SdlError::SdlError(const SdlDisplay::SdlError &cpy) : NibblerException("SdlDisplay")
+{
+    if (&cpy != this)
+    {
+        _msg << this->getMessage();
+    }
 }
 
 const std::string SdlDisplay::SdlError::getMessage(void) const
 {
-  std::stringstream   ss;
-
-  ss << "SdlDisplay : " << this->getError();
-  return ss.str();
+  return _msg.str();
 }

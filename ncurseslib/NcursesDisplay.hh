@@ -21,8 +21,13 @@ class		NcursesDisplay : public IDisplay
 {
   class		NcursesError : public NibblerException
   {
+  private:
+      std::stringstream _msg;
   public:
     NcursesError(const std::string &error);
+    NcursesError(const NcursesError &cpy);
+    ~NcursesError(void) throw() {}
+    const std::string getMessage(void) const;
   };
 private:
   WINDOW	*_win;

@@ -22,8 +22,11 @@ class		SdlDisplay : public IDisplay
 {
   class		SdlError : public NibblerException
   {
+  private:
+      std::stringstream _msg;
   public:
     SdlError(const std::string &error);
+    SdlError(const SdlError &cpy);
     ~SdlError(void) throw() {}
     const std::string getMessage(void) const;
   };

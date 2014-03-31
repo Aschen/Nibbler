@@ -6,13 +6,13 @@ Snake::Snake(const Coord &mapSize, const Coord &start)
     unsigned int     i = 0;
 
     if (start.first > mapSize.first || start.second > mapSize.second)
-        throw Error("Start point is outside the map !");
+        throw Error(start, _map);
     while (i < _size)
     {
         if (start.second + i <= mapSize.second)
             _coords.push_back(Coord(start.first, start.second + i));
         else
-            throw Error("Size of snake is too big with this start point !");
+            throw Error(start, _map, _size);
         ++i;
     }
     _tail = *(--(_coords.end()));
@@ -97,14 +97,27 @@ Object Snake::getType() const
 ///////////
 // Error //
 ///////////
-Snake::Error::Error(const std::string &error) : NibblerException(error)
+Snake::Error::Error(const Coord &start, const Coord &map) : NibblerException("Snake")
 {
+    _msg << this->_module << "Start point " << start;
+    _msg << " is outside the map ! " << map << std::endl;
+}
+
+Snake::Error::Error(const Coord &start, const Coord &map, int size) : NibblerException("Snake")
+{
+    _msg << this->_module << "Size of snake (" << size << ") is too big with this start point !";
+    _msg << start << " for the map of size " << map << std::endl;
+}
+
+Snake::Error::Error(const Error &cpy) : NibblerException("Snake")
+{
+    if (&cpy != this)
+    {
+        _msg << cpy.getMessage();
+    }
 }
 
 const std::string Snake::Error::getMessage(void) const
 {
-    std::stringstream   ss;
-
-    ss << "Snake : " << this->getError();
-    return ss.str();
+    return _msg.str();
 }
