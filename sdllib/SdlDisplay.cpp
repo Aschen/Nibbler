@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Mon Mar 24 17:15:48 2014 brunne-r
+// Last update Mon Mar 24 17:45:41 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -46,23 +46,25 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0)
     throw SdlError("Unexpected error while drawing\n");
   while (it < end)
+  {
+    c = ((*it)->getCoord());
+    a = c.begin();
+    z = c.end();
+    actu = _surfaces[(*it)->getType()];
+    while (a < z)
     {
-      c = ((*it)->getCoord());
-      a = c.begin();
-      z = c.end();
-      actu = _surfaces[(*it)->getType()];
-      while (a < z)
-	{
-	  off.x = (*a).first * SBLOCK;
-	  off.y = (*a).second * SBLOCK;
-	  if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
-	    throw SdlError("Unexpected error while drawing\n");
-	  ++a;
-	}
-      ++it;
-    }
-  if (SDL_Flip(_screen) < 0)
-    throw SdlError("Undexpected error while drawing");
+     off.x = (*a).first * SBLOCK;
+     off.y = (*a).second * SBLOCK;
+     if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
+     {
+       throw SdlError("Unexpected error while drawing\n");
+     }
+     ++a;
+   }
+   ++it;
+ }
+ if (SDL_Flip(_screen) < 0)
+  throw SdlError("Undexpected error while drawing");
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -72,27 +74,27 @@ Key			SdlDisplay::getKey(void) const
   SDL_WaitEvent(&e);
 
   if (e.type == SDL_KEYDOWN)
+  {
+    switch (e.key.keysym.sym)
     {
-      switch (e.key.keysym.sym)
-	{
-	case SDLK_UP:
-	  return UP;
-	case SDLK_DOWN:
-	  return DOWN;
-	case SDLK_LEFT:
-	  return LEFT;
-	case SDLK_RIGHT:
-	  return RIGHT;
-	case SDLK_ESCAPE:
-	  return QUIT;
-	default:
-	  return OTHERS;
-	}
-    }
-  else if (e.type == SDL_QUIT)
-    return QUIT;
-  else
-    return OTHERS;
+     case SDLK_UP:
+     return UP;
+     case SDLK_DOWN:
+     return DOWN;
+     case SDLK_LEFT:
+     return LEFT;
+     case SDLK_RIGHT:
+     return RIGHT;
+     case SDLK_ESCAPE:
+     return QUIT;
+     default:
+     return OTHERS;
+   }
+ }
+ else if (e.type == SDL_QUIT)
+  return QUIT;
+else
+  return OTHERS;
 }
 
 void		SdlDisplay::initFond(int width, int height)
@@ -104,50 +106,50 @@ void		SdlDisplay::initFond(int width, int height)
 
   ground = IMG_Load("./images/ground.png");
   _fond = SDL_CreateRGBSurface(SDL_HWSURFACE, width * SBLOCK,
-			       height * SBLOCK, 32, 0, 0, 0, 0);
+    height * SBLOCK, 32, 0, 0, 0, 0);
   if (!ground || !_fond)
     throw SdlError("Cannot load images\n");
   i = 0;
   while (i < width)
+  {
+    j = 0;
+    while (j < height)
     {
-      j = 0;
-      while (j < height)
-	{
-	  off.x = (i * SBLOCK);
-	  off.y = (j * SBLOCK);
-	  if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
-	    throw SdlError("Unexpected error while drawing\n");
-	  ++j;
-	}
-      ++i;
-    }
-  off.x = 0;
-  off.y = 0;
-  if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0 ||
-      SDL_Flip(_screen) < 0)
-    throw SdlError("Unexpected error while drawing\n");
-  SDL_FreeSurface(ground);
+     off.x = (i * SBLOCK);
+     off.y = (j * SBLOCK);
+     if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
+       throw SdlError("Unexpected error while drawing\n");
+     ++j;
+   }
+   ++i;
+ }
+ off.x = 0;
+ off.y = 0;
+ if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0 ||
+  SDL_Flip(_screen) < 0)
+  throw SdlError("Unexpected error while drawing\n");
+SDL_FreeSurface(ground);
 }
 
 void		SdlDisplay::init(int width, int height)
 {
   _screen = SDL_SetVideoMode(width * SBLOCK,
-			     height * SBLOCK,
-			     0,
-			     SDL_HWSURFACE | SDL_DOUBLEBUF);
+    height * SBLOCK,
+    0,
+    SDL_HWSURFACE | SDL_DOUBLEBUF);
   if (!_screen)
-    {
-      throw SdlError(SDL_GetError());
-    }
+  {
+    throw SdlError(SDL_GetError());
+  }
   else
-    {
-      initFond(width, height);
-      _surfaces[WALL] = IMG_Load("./images/ground.png");
-      _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
-      _surfaces[POWERUP] = IMG_Load("./images/apple.png");
-      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
-	throw SdlError("Cannot load images.");
-    }
+  {
+    initFond(width, height);
+    _surfaces[WALL] = IMG_Load("./images/wood.png");
+    _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
+    _surfaces[POWERUP] = IMG_Load("./images/apple.png");
+    if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
+     throw SdlError("Cannot load images.");
+ }
 }
 
 extern "C" IDisplay *getDisplay(void)
@@ -165,8 +167,8 @@ SdlDisplay::SdlError::SdlError(const std::string &error) : NibblerException(erro
 
 const std::string SdlDisplay::SdlError::getMessage(void) const
 {
-    std::stringstream   ss;
+  std::stringstream   ss;
 
-    ss << "SdlDisplay : " << this->getError();
-    return ss.str();
+  ss << "SdlDisplay : " << this->getError();
+  return ss.str();
 }
