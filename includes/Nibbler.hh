@@ -14,6 +14,7 @@
 #define	SBLOCK	40
 
 typedef std::pair<unsigned int, unsigned int>   Coord;
+
 typedef enum e_key
 {
     UP = 0,
