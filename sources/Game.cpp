@@ -41,7 +41,7 @@ void Game::startGame(void)
         {
         case WALL:
         case SNAKE:
-            std::cout << "Game over !" << std::endl;
+	  //std::cout << "Game over !" << std::endl;
             _flag = MENU;
             break;
         case POWERUP:
@@ -50,7 +50,7 @@ void Game::startGame(void)
             while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
         case EMPTY:
             python->move();
-            this->dumpObjects();
+	    //            this->dumpObjects();
             _display->display(_objects);
         }
         usleep(500000);
@@ -67,19 +67,19 @@ void Game::startMenu(void)
     while (_flag >= MENU)
     {
         this->clearGame();
-        std::cout << std::endl << "Bienvenu sur le Menu !" << std::endl;
+        //std::cout << std::endl << "Bienvenu sur le Menu !" << std::endl;
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-        std::cout << "Initialisation du jeux !" << std::endl;
-        this->dumpObjects();
+        //std::cout << "Initialisation du jeux !" << std::endl;
+        //this->dumpObjects();
         _display->display(_objects);
         sleep(2);
-        std::cout << "Demarrage de la partie :D" << std::endl;
+        //std::cout << "Demarrage de la partie :D" << std::endl;
         this->startGame();
-        std::cout << "FIN" << std::endl;
+        //std::cout << "FIN" << std::endl;
     }
     pthread_kill(keyThread, SIGKILL);
 }
@@ -103,7 +103,7 @@ void Game::dumpObjects(void) const
 
     while (it != _objects.end())
     {
-        std::cout << "Object of type " << (*it)->getType() << std::endl;
+      std::cout << "Object of type " << (*it)->getType() << std::endl;
         (*it)->dump();
         std::cout << std::endl;
         ++it;
@@ -154,12 +154,12 @@ void *hookKeys(void *data)
         if (key == QUIT)
         {
             nibbler->setFlag(EXIT);
-            std::cout << "Key EXIT pressed" << std::endl;
+	    // std::cout << "Key EXIT pressed" << std::endl;
             break;
         }
         if (key <= RIGHT && nibbler->getFlag() == PLAY)
         {
-            std::cout << "Key " << key << " pressed" << std::endl;
+	  //std::cout << "Key " << key << " pressed" << std::endl;
             nibbler->setDirection(key);
         }
     }

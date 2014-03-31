@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Mon Mar 31 14:51:10 2014 brunne-r
+// Last update Mon Mar 31 16:10:03 2014 brunne-r
 //
 
 #ifndef SDLDISPLAY_H
@@ -25,7 +25,6 @@ class		SdlDisplay : public IDisplay
   {
   public:
     SdlError(const std::string &error);
-    ~SdlError(void) throw() {}
     const std::string getMessage(void) const;
   };
 private:

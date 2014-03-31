@@ -15,7 +15,9 @@ int     main(int ac, char **av)
         }
         catch (const NibblerException &e)
         {
-            std::cerr << e.getMessage() << std::endl;
+	  std::cerr << "coucou" << std::endl;
+	  std::cerr << e.getMessage() << std::endl;
+	    exit(0);
         }
     }
     else

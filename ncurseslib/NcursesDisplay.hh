@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Mon Mar 24 17:27:11 2014 brunne-r
+// Last update Mon Mar 31 16:07:08 2014 brunne-r
 //
 
 #ifndef NCDISPLAY_H
@@ -23,6 +23,9 @@ class		NcursesDisplay : public IDisplay
   {
   public:
     NcursesError(const std::string &error);
+    NcursesError(const NcursesError &cpy);
+    ~NcursesError(void) throw() {}
+    const std::string getMessage(void) const;
   };
 private:
   WINDOW	*_win;
