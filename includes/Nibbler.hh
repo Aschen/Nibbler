@@ -14,6 +14,7 @@
 #define	SBLOCK	40
 
 typedef std::pair<unsigned int, unsigned int>   Coord;
+
 typedef enum e_key
 {
     UP = 0,
@@ -43,5 +44,7 @@ typedef enum e_flag
     MENU,
     PLAY
 }            Flag;
+
+std::ostream &operator<<(std::ostream &os, const Coord &coord);
 
 #endif // NIBBLER_HH
