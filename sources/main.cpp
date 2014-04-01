@@ -20,6 +20,7 @@ int     main(int ac, char **av)
             display = dyn.getInstance("getDisplay");
             display->init(20, 20);
             display->display(objs);
+            sleep(5);
             delete display;
         }
         catch (const NibblerException &e)
