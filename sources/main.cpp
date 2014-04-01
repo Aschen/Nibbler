@@ -9,9 +9,18 @@ int     main(int ac, char **av)
     {
         try
         {
-            Game        nibbler(Coord(15, 15), av[1]);
+//            Game        nibbler(Coord(15, 15), av[1]);
 
-            nibbler.startMenu();
+//            nibbler.startMenu();
+
+            DLLoader<IDisplay, IDisplay*(*)()>  dyn(av[1]);
+            IDisplay                            *display;
+            std::vector<AObject*>   objs;
+
+            display = dyn.getInstance("getDisplay");
+            display->init(20, 20);
+            display->display(objs);
+            delete display;
         }
         catch (const NibblerException &e)
         {

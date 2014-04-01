@@ -32,6 +32,8 @@ $(NAME):	$(OBJS)
 	$(CXX) -o $(NAME) $(OBJS) $(LDLIBS)
 	make -C ./sdllib/
 	make -C ./ncurseslib/
+	make -C ./opengllib/
+
 clean:
 	rm -f $(OBJS)
 
@@ -39,5 +41,6 @@ fclean:	clean
 	rm -f $(NAME)
 	make fclean -C ./sdllib/
 	make fclean -C ./ncurseslib/
+	make fclean -C ./opengllib/
 
 re: fclean all
