@@ -9,19 +9,19 @@ int     main(int ac, char **av)
     {
         try
         {
-//            Game        nibbler(Coord(15, 15), av[1]);
+            Game        nibbler(Coord(15, 15), av[1]);
 
-//            nibbler.startMenu();
+            nibbler.startMenu();
 
-            DLLoader<IDisplay, IDisplay*(*)()>  dyn(av[1]);
-            IDisplay                            *display;
-            std::vector<AObject*>   objs;
+//            DLLoader<IDisplay, IDisplay*(*)()>  dyn(av[1]);
+//            IDisplay                            *display;
+//            std::vector<AObject*>   objs;
 
-            display = dyn.getInstance("getDisplay");
-            display->init(20, 20);
-            display->display(objs);
-            sleep(5);
-            delete display;
+//            display = dyn.getInstance("getDisplay");
+//            display->init(20, 20);
+//            display->display(objs);
+//            read(0, NULL, 1);
+//            delete display;
         }
         catch (const NibblerException &e)
         {

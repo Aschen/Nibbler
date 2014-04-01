@@ -53,14 +53,14 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
     actu = _surfaces[(*it)->getType()];
     while (a < z)
     {
-     off.x = (*a).first * SBLOCK;
-     off.y = (*a).second * SBLOCK;
-     if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
-     {
-       throw SdlError("Unexpected error while drawing\n");
-     }
-     ++a;
-   }
+        off.x = (*a).first * SBLOCK;
+        off.y = (*a).second * SBLOCK;
+        if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
+        {
+            throw SdlError("Unexpected error while drawing\n");
+        }
+        ++a;
+    }
    ++it;
  }
  if (SDL_Flip(_screen) < 0)
