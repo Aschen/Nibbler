@@ -5,47 +5,61 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Mon Mar 31 17:28:54 2014 brunne-r
+// Last update Tue Apr  1 11:13:30 2014 brunne-r
 //
 
+#include <errno.h>
+#include <string.h>
 #include "NcursesDisplay.hh"
 
 NcursesDisplay::NcursesDisplay()
 {
-  std::cerr << "init" << std::endl;
-  initscr();
-  std::cout << "Start init" << std::endl;
-  if (initscr() == NULL || !printf("1") ||
-      cbreak() == ERR || !printf("2") ||
-      keypad(stdscr, TRUE) == ERR || !printf("3") ||
-      noecho() == ERR || !printf("4") ||
-      start_color() == ERR || !printf("5"))
-    {
-      std::cerr << "launch error" << std::endl;
-    }
-  std::cout << "FIN init" << std::endl;
-  init_pair(SNAKE + 1, COLOR_BLACK, COLOR_GREEN);
-  init_pair(POWERUP + 1, COLOR_BLACK, COLOR_RED);
-  init_pair(WALL + 1, COLOR_BLACK, COLOR_BLUE);
-  init_pair(8, COLOR_BLACK, COLOR_BLACK);
+  if (initscr() == NULL ||
+      cbreak() == ERR ||
+      keypad(stdscr, TRUE) == ERR ||
+      noecho() == ERR ||
+      start_color() == ERR ||
+      curs_set(0) == ERR)
+    throw NcursesError("Can't initialize Ncurses");
+  init_pair(SNAKE + 1, COLOR_GREEN, COLOR_BLACK);
+  init_pair(POWERUP + 1, COLOR_RED, COLOR_BLACK);
+  init_pair(WALL + 1, COLOR_BLACK, COLOR_YELLOW);
+  init_pair(8, COLOR_WHITE, COLOR_BLACK);
+  strncpy(_chars[SNAKE], "[]", 2);
+  strncpy(_chars[POWERUP], "::", 2);
+  strncpy(_chars[WALL], "  ", 2);
 }
 
 NcursesDisplay::~NcursesDisplay()
 {
-  delwin(_win);
   endwin();
 }
 
 void NcursesDisplay::init(int width, int height)
 {
-  _win = newwin((width + 2) * 2, height * 2,
-		0, 0);
-  if (!_win)
-    throw NcursesDisplay::NcursesError("Cannot launch ncurses");
-  if (wborder(_win,'|', '|', '-', '-', '+', '+', '+', '+') == ERR)
+  _lines = height;
+  _nbcols = width * 2;
+  if (border('|', '|', '-', '-', '+', '+', '+', '+') == ERR)
     throw NcursesDisplay::NcursesError("Ncurses runtime error.");
-  if (wrefresh(_win) == ERR)
+  if (refresh() == ERR)
     throw NcursesDisplay::NcursesError("Ncurses runtime error.");
+}
+
+void		NcursesDisplay::cleanScr(void) const
+{
+  int		i(0);
+  std::string	empty_line;
+
+  empty_line.reserve(_nbcols + 1);
+  fill_n(empty_line.begin(), _nbcols, ' ');
+  empty_line[_nbcols] = 0;
+  while (i < _lines)
+    {
+      if (move(i + 1, 1) == ERR ||
+	  printw(empty_line.c_str()) == ERR)
+	throw NcursesError("Unexpected error while drawing\n");
+      ++i;
+    }
 }
 
 void NcursesDisplay::display(const std::vector<AObject*> &map) const
@@ -57,6 +71,7 @@ void NcursesDisplay::display(const std::vector<AObject*> &map) const
 
   end = map.end();
   it = map.begin();
+  cleanScr();
   while (it < end)
     {
       c = ((*it)->getCoord());
@@ -64,15 +79,17 @@ void NcursesDisplay::display(const std::vector<AObject*> &map) const
       z = c.end();
       while (a < z)
 	{
-	  if (wmove(_win, (*a).second + 1, (*a).first * 2 + 2) == ERR ||
-	      wattron(_win, COLOR_PAIR((*it)->getType() + 1)) == ERR ||
-	      wprintw(_win, "  ") == ERR)
-	    throw NcursesError("Unexpected error while drawing\n");
+	  if (move((*a).second + 1, ((*a).first * 2) + 1) == ERR ||
+	      attron(COLOR_PAIR((*it)->getType() + 1)) == ERR ||
+	      printw(_chars[(*it)->getType()]) == ERR)
+	    {
+	      throw NcursesError("Unexpected error while drawing\n");
+	    }
 	  ++a;
 	}
       ++it;
     }
-  if (wrefresh(_win) == ERR)
+  if (refresh() == ERR)
     throw NcursesError("Undexpected error while drawing");
 }
 
@@ -80,10 +97,11 @@ Key	NcursesDisplay::getKey(void) const
 {
   int	k;
 
-  k = wgetch(_win);
-  return QUIT;
+  k = getch();
   switch (k)
     {
+    case 27:
+      return QUIT;
     case KEY_LEFT:
       return LEFT;
     case KEY_RIGHT:
@@ -97,7 +115,7 @@ Key	NcursesDisplay::getKey(void) const
     default:
       return OTHERS;
     }
-  return UP;
+  return OTHERS;
 }
 
 extern "C" IDisplay *getDisplay()

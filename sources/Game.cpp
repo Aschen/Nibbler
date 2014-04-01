@@ -18,7 +18,7 @@ Object Game::lookup(const Coord &search) const
 
     while (it != _objects.end())
     {
-        if (find((*it)->getCoord().begin(), (*it)->getCoord().end(), search) != (*it)->getCoord().end())
+      if (find((*it)->getCoord().begin(), (*it)->getCoord().end(), search) != (*it)->getCoord().end())
            result = (*it)->getType();
         ++it;
     }
@@ -53,7 +53,7 @@ void Game::startGame(void)
 	    //            this->dumpObjects();
             _display->display(_objects);
         }
-        usleep(500000);
+        usleep(99000);
     }
 }
 
@@ -76,7 +76,7 @@ void Game::startMenu(void)
         //std::cout << "Initialisation du jeux !" << std::endl;
         //this->dumpObjects();
         _display->display(_objects);
-        sleep(2);
+        sleep(1);
         //std::cout << "Demarrage de la partie :D" << std::endl;
         this->startGame();
         //std::cout << "FIN" << std::endl;
