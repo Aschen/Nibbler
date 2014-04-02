@@ -41,7 +41,6 @@ void Game::startGame(void)
         {
         case WALL:
         case SNAKE:
-	  //std::cout << "Game over !" << std::endl;
             _flag = MENU;
             break;
         case POWERUP:
@@ -50,7 +49,6 @@ void Game::startGame(void)
             while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
         case EMPTY:
             python->move();
-	    //            this->dumpObjects();
             _display->display(_objects);
         }
         usleep(99000);

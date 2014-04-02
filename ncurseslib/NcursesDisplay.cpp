@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Tue Apr  1 11:13:30 2014 brunne-r
+// Last update Tue Apr  1 11:45:58 2014 brunne-r
 //
 
 #include <errno.h>
@@ -33,6 +33,15 @@ NcursesDisplay::NcursesDisplay()
 NcursesDisplay::~NcursesDisplay()
 {
   endwin();
+}
+
+void NcursesDisplay::myBorder()
+{
+  std::string ht;
+
+
+  if (move(0,0))
+
 }
 
 void NcursesDisplay::init(int width, int height)
