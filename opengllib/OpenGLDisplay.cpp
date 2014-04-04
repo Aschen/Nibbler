@@ -130,11 +130,9 @@ void OpenGLDisplay::display(const std::vector<AObject*> &map) const
     it = map.begin();
 
     this->reset();
-    this->setView(getCoo(20, 20 , 12), getCoo(0, 0, 0), getCoo(0, 0, 1));
+    this->setView(getCoo(_map.first / 2 - _map.first / 3, _map.second + _map.second / 2 , (_map.first+_map.second) / 2), getCoo(15 / 2, 15 / 2, 0), getCoo(0, 0, 1));
     glRotated(0.0, 0, 0, 1);
     this->drawFloor();
-    this->drawCube(getCoo(0, 0, 2), getCol(100, 100, 100));
-    this->drawCube(getCoo(7, 15, 2), getCol(100, 100, 0));
     while (it < end)
     {
         coo = ((*it)->getCoord());

@@ -32,7 +32,9 @@ public:
     void            move(void);
     void            grow(void);
     const Coord     &getNextMove(Key direction);
-
+    const Coord     &getNextMove(const Coord &next);
+    const Coord     &getHead(void) const;
+    unsigned int    getSize(void) const;
 public:
     // AObject
     const std::vector<Coord>    &getCoord(void) const;

@@ -15,7 +15,7 @@ SdlDisplay::SdlDisplay()
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
     throw SdlError(SDL_GetError());
 
-  _surfaces = new SDL_Surface*[3];
+  _surfaces = new SDL_Surface*[4];
   if (!_surfaces)
     throw SdlError("Cannot allocate more memory.");
 }
@@ -25,6 +25,7 @@ SdlDisplay::~SdlDisplay()
   SDL_FreeSurface(_surfaces[WALL]);
   SDL_FreeSurface(_surfaces[SNAKE]);
   SDL_FreeSurface(_surfaces[POWERUP]);
+  SDL_FreeSurface(_surfaces[PORTAL]);
   delete[] _surfaces;
   SDL_FreeSurface(_extras[0]);
   SDL_FreeSurface(_extras[1]);
@@ -108,7 +109,7 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
       ++it;
     }
   if (SDL_Flip(_screen) < 0)
-    throw SdlError("Undexpected error while drawing");
+    throw SdlError("Unexpected error while drawing");
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -192,7 +193,8 @@ void		SdlDisplay::init(int width, int height)
       _surfaces[WALL] = IMG_Load("./images/wood.png");
       _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
       _surfaces[POWERUP] = IMG_Load("./images/apple.png");
-      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
+      _surfaces[PORTAL] = IMG_Load("./images/apple.png"); // check
+      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP] || !_surfaces[PORTAL])
 	throw SdlError("Cannot load images.");
       _extras[0] = IMG_Load("./images/snake_head.png");
       _extras[1] = IMG_Load("./images/snake_queue.png");

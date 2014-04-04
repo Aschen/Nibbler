@@ -4,6 +4,7 @@ Game::Game(const Coord &map, const std::string &library)
     : _map(map), _dll(DLLoader<IDisplay, IDisplay*(*)()>(library)), _flag(MENU), _direction(OTHERS)
 {
     _display = _dll.getInstance("getDisplay");
+    _moveType = 1;
 }
 
 Game::~Game(void)
@@ -29,16 +30,30 @@ void Game::startGame(void)
 {
     Snake       *python;
     Powerup     *fruit;
+    Portal      *portal;
     Object      snakeHead;
 
     python = dynamic_cast<Snake*>(_objects[SNAKE]);
     fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
+    portal = dynamic_cast<Portal*>(_objects[PORTAL]);
     _flag = PLAY;
     while (_flag >= PLAY)
     {
-        snakeHead = this->lookup(python->getNextMove(_direction));
+        this->dumpObjects();
+        if (_moveType == 1)
+            snakeHead = this->lookup(python->getNextMove(_direction));
+        else
+        {
+            snakeHead = this->lookup(python->getNextMove(portal->getOut(python->getHead())));
+            _moveType = 1;
+        }
         switch (snakeHead)
         {
+        case PORTAL:
+            _moveType = 2;
+            python->move();
+            _display->display(_objects);
+            break;
         case WALL:
         case SNAKE:
             _flag = MENU;
@@ -68,8 +83,10 @@ void Game::startMenu(void)
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
+        _objects.push_back(new Portal(_map, Couple(Coord(0, _map.second/2), Coord(_map.first - 1, _map.second/2))));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
+        this->dumpObjects();
         _display->display(_objects);
         while (_direction == OTHERS && _flag >= MENU)
             usleep(10000);
@@ -89,6 +106,7 @@ void Game::clearGame(void)
     }
     _objects.clear();
     _direction = OTHERS;
+    _moveType = 1;
 }
 
 void Game::dumpObjects(void) const

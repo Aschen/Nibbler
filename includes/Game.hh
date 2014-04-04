@@ -9,6 +9,7 @@
 #include "Snake.hh"
 #include "Wall.hh"
 #include "Powerup.hh"
+#include "Portal.hh"
 
 class   Game
 {
@@ -21,6 +22,7 @@ private:
     Key                     _direction;
     IDisplay                *_display;
     std::vector<AObject*>   _objects;
+    int                     _moveType;
 public:
     Game(const Coord &map, const std::string &library);
     ~Game(void);
