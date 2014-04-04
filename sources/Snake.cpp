@@ -45,22 +45,24 @@ void Snake::grow(void)
     _coords.push_back(Coord(_tail.first, _tail.second));
 }
 
-const Coord &Snake::getNextMove(Direction direction)
+const Coord &Snake::getNextMove(Key direction)
 {
     _head = *(_coords.begin());
     switch (direction)
     {
-    case MUP:
+    case UP:
         _head.second -= 1;
         break;
-    case MDOWN:
+    case DOWN:
         _head.second += 1;
         break;
-    case MLEFT:
+    case LEFT:
         _head.first -= 1;
         break;
-    case MRIGHT:
+    case RIGHT:
         _head.first += 1;
+        break;
+    default:
         break;
     }
     return _head;

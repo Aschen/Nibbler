@@ -1,9 +1,9 @@
 #include "Game.hh"
 
 Game::Game(const Coord &map, const std::string &library)
-    : _map(map), _dyn(DLLoader<IDisplay, IDisplay*(*)()>(library)), _flag(MENU), _direction(MUP)
+    : _map(map), _dll(DLLoader<IDisplay, IDisplay*(*)()>(library)), _flag(MENU), _direction(OTHERS)
 {
-    _display = _dyn.getInstance("getDisplay");
+    _display = _dll.getInstance("getDisplay");
 }
 
 Game::~Game(void)
@@ -31,28 +31,27 @@ void Game::startGame(void)
     Powerup     *fruit;
     Object      snakeHead;
 
-    _flag = PLAY;
     python = dynamic_cast<Snake*>(_objects[SNAKE]);
     fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
+    _flag = PLAY;
     while (_flag >= PLAY)
     {
         snakeHead = this->lookup(python->getNextMove(_direction));
         switch (snakeHead)
-        {
-        case WALL:
-        case SNAKE:
-            std::cout << "Game over !" << std::endl;
-            _flag = MENU;
-            break;
-        case POWERUP:
-            python->grow();
-            fruit->clearPowerup();
-            while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-        case EMPTY:
-            python->move();
-            this->dumpObjects();
-            _display->display(_objects);
-        }
+            {
+            case WALL:
+            case SNAKE:
+                std::cout << "Game over !" << std::endl;
+                _flag = MENU;
+                break;
+            case POWERUP:
+                python->grow();
+                fruit->clearPowerup();
+                while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
+            case EMPTY:
+                python->move();
+                _display->display(_objects);
+            }
         usleep(500000);
     }
 }
@@ -68,20 +67,20 @@ void Game::startMenu(void)
     {
         this->clearGame();
         std::cout << std::endl << "Bienvenu sur le Menu !" << std::endl;
+        std::cout << "Initialisation du jeux !" << std::endl;
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-        std::cout << "Initialisation du jeux !" << std::endl;
-        this->dumpObjects();
         _display->display(_objects);
-        sleep(2);
+        while (_direction == OTHERS && _flag >= MENU)
+            usleep(10000);
         std::cout << "Demarrage de la partie :D" << std::endl;
-        this->startGame();
+        if (_flag >= MENU)
+            this->startGame();
         std::cout << "FIN" << std::endl;
     }
-    pthread_kill(keyThread, SIGKILL);
 }
 
 void Game::clearGame(void)
@@ -94,7 +93,7 @@ void Game::clearGame(void)
         ++it;
     }
     _objects.clear();
-    _direction = MUP;
+    _direction = OTHERS;
 }
 
 void Game::dumpObjects(void) const
@@ -130,7 +129,8 @@ void Game::setFlag(Flag flag)
 
 void Game::setDirection(Key key)
 {
-    _direction = static_cast<Direction>(key);
+    if (_direction * -1 != key)
+        _direction = key;
 }
 
 IDisplay *Game::getDisplay() const
@@ -150,17 +150,24 @@ void *hookKeys(void *data)
         std::cerr << "La c'est la merde !" << std::endl;
     while (nibbler->getFlag() >= MENU)
     {
-        key = nibbler->getDisplay()->getKey();
-        if (key == QUIT)
+        key = nibbler->getDisplay()->getKey();        
+        switch (key)
         {
-            nibbler->setFlag(EXIT);
-            std::cout << "Key EXIT pressed" << std::endl;
+        case QUIT:
+            if (nibbler->getFlag() == PLAY)
+                nibbler->setFlag(MENU);
+            else
+                nibbler->setFlag(EXIT);
             break;
-        }
-        if (key <= RIGHT && nibbler->getFlag() == PLAY)
-        {
-            std::cout << "Key " << key << " pressed" << std::endl;
+        case UP:
+        case DOWN:
+        case LEFT:
+        case RIGHT:
+            std::cout << "Set direction " << key << std::endl;
             nibbler->setDirection(key);
+            break;
+        default:
+            break;
         }
     }
     pthread_exit(0);
@@ -169,5 +176,31 @@ void *hookKeys(void *data)
 std::ostream &operator<<(std::ostream &os, const Coord &coord)
 {
     os << "(" << coord.first << "," << coord.second << ")";
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, Key key)
+{
+    switch (key)
+    {
+    case UP:
+        os << "UP";
+        break;
+    case DOWN:
+        os << "DOWN";
+        break;
+    case LEFT:
+        os << "LEFT";
+        break;
+    case RIGHT:
+        os << "RIGHT";
+        break;
+    case QUIT:
+        os << "QUIT";
+        break;
+    case OTHERS:
+        os << "OTHER";
+        break;
+    }
     return os;
 }

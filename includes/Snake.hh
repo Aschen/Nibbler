@@ -31,7 +31,7 @@ public:
     ~Snake(void);
     void            move(void);
     void            grow(void);
-    const Coord     &getNextMove(Direction direction);
+    const Coord     &getNextMove(Key direction);
 
 public:
     // AObject

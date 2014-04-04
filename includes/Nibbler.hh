@@ -17,12 +17,12 @@ typedef std::pair<unsigned int, unsigned int>   Coord;
 
 typedef enum e_key
 {
-    UP = 0,
-    DOWN,
-    LEFT,
-    RIGHT,
-    QUIT,
-    OTHERS
+    UP = 1,
+    DOWN = -1,
+    LEFT = 2,
+    RIGHT = -2,
+    QUIT = 3,
+    OTHERS = 4
 }            Key;
 typedef enum e_object
 {
@@ -45,6 +45,7 @@ typedef enum e_flag
     PLAY
 }            Flag;
 
-std::ostream &operator<<(std::ostream &os, const Coord &coord);
+std::ostream    &operator<<(std::ostream &os, const Coord &coord);
+std::ostream    &operator<<(std::ostream &os, Key key);
 
 #endif // NIBBLER_HH

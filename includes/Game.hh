@@ -16,9 +16,9 @@ public:
     typedef void (Game::*methodPtr)(const AObject *obj);
 private:
     const Coord             _map;
-    DLLoader<IDisplay, IDisplay*(*)()>        _dyn;
+    DLLoader<IDisplay, IDisplay*(*)()>        _dll;
     Flag                    _flag;
-    Direction               _direction;
+    Key                     _direction;
     IDisplay                *_display;
     std::vector<AObject*>   _objects;
 public:

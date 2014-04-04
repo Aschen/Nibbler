@@ -31,12 +31,10 @@ void OpenGLDisplay::setView(Coo3 eye, Coo3 center, Coo3 vert) const
 
 
 
-// Prend les coordonnees du point en 0, 0, 0 (relativement)
 void OpenGLDisplay::drawCube(Coo3 coord, Color col) const
 {
     glBegin(GL_QUADS);
 
-    coord += 5;
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x, coord.y, coord.z);
     glVertex3d(coord.x + 1, coord.y, coord.z);
