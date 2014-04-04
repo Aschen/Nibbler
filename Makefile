@@ -19,7 +19,7 @@ SRCS	=	sources/main.cpp \
 
 CXXFLAGS=	-Wall -W -Wextra -I ./includes -fPIC
 
-LDLIBS =	-ldl -lSDL -lSDL_image -lpthread
+LDLIBS =	-ldl -lSDL -lSDL_image -lSDL_gfx -lpthread -lncurses
 
 OBJS	=	$(SRCS:.cpp=.o)
 

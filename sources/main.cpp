@@ -2,58 +2,35 @@
 #include "Game.hh"
 #include "Snake.hh"
 
-
-int     main(int ac, char **av)
+template <typename T>
+T StringToNumber (const std::string &Text)
 {
-    if (ac == 2)
-    {
-        try
-        {
-            Game        nibbler(Coord(15, 15), av[1]);
-
-            nibbler.startMenu();
-
-//            DLLoader<IDisplay, IDisplay*(*)()>  dyn(av[1]);
-//            IDisplay                            *display;
-//            std::vector<AObject*>   objs;
-
-//            display = dyn.getInstance("getDisplay");
-//            display->init(20, 20);
-//            display->display(objs);
-//            read(0, NULL, 1);
-//            delete display;
-        }
-        catch (const NibblerException &e)
-        {
-            std::cerr << e.getMessage() << std::endl;
-        }
-    }
-    else
-        std::cout << "Usage : " << av[0] << " <library> " << std::endl;
-    return 0;
+  std::istringstream ss(Text);
+  T result;
+  return (ss >> result ? result : 0);
 }
-/*
-int		main(int ac , char **av)
-{
-  if (ac >= 2)
-    {
-      DLLoader<IDisplay, IDisplay*(*)()>	Dyn(av[1]);
-      IDisplay	*Display;
 
-      try
+int			main(int ac, char **av)
+{
+  int			sx, sy;
+
+  if (ac == 4)
     {
-      Display = Dyn.getInstance("getDisplay");
-      Display->init(10,10);
-      while (Display->getKey() != QUIT)
+      sx = StringToNumber<int>(av[1]);
+      sy = StringToNumber<int>(av[2]);
+      try
+	{
+	  Game        nibbler(Coord(sx, sy),
+			      av[3]);
+	  nibbler.startMenu();
+        }
+      catch (const NibblerException &e)
         {
-          usleep(200);
+	  std::cerr << e.getMessage() << std::endl;
+	  return -1;
         }
     }
-      catch (NibblerException &e)
-    {
-      std::cerr << "Error:" << e.getMessage() << std::endl;
-    }
-    }
+  else
+    std::cout << "Usage : " << av[0] << " X Y <library> " << std::endl;
   return 0;
 }
-*/

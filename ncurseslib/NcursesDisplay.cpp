@@ -5,9 +5,12 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Mon Mar 24 17:33:29 2014 brunne-r
+// Last update Fri Apr  4 11:24:26 2014 brunne-r
 //
 
+#include <errno.h>
+#include <string.h>
+#include <curses.h>
 #include "NcursesDisplay.hh"
 
 NcursesDisplay::NcursesDisplay()
@@ -15,29 +18,51 @@ NcursesDisplay::NcursesDisplay()
   if (initscr() == NULL ||
       cbreak() == ERR ||
       keypad(stdscr, TRUE) == ERR ||
-      noecho() == ERR)
-    throw NcursesDisplay::NcursesError("Unable to init Ncurses.");
-  _chars[SNAKE] = "\033[32m  \033[00m";
-  _chars[WALL] = "\033[35m  \033[00m";
-  _chars[POWERUP] = "\033[31m  \033[00m";
+      noecho() == ERR ||
+      start_color() == ERR ||
+      curs_set(0) == ERR)
+    throw NcursesError("Can't initialize Ncurses");
+  init_pair(SNAKE + 1, COLOR_GREEN, COLOR_BLACK);
+  init_pair(POWERUP + 1, COLOR_RED, COLOR_BLACK);
+  init_pair(WALL + 1, COLOR_BLACK, COLOR_YELLOW);
+  init_pair(8, COLOR_WHITE, COLOR_BLACK);
+  strncpy(_chars[SNAKE], "[]", 2);
+  strncpy(_chars[POWERUP], "::", 2);
+  strncpy(_chars[WALL], "  ", 2);
 }
 
 NcursesDisplay::~NcursesDisplay()
 {
-  delwin(_win);
   endwin();
 }
 
 void NcursesDisplay::init(int width, int height)
 {
-  _win = newwin((width + 2) * 2, height * 2,
-		0, 0);
-  if (!_win)
-    throw NcursesDisplay::NcursesError("Cannot launch ncurses");
-  if (wborder(_win,'|', '|', '-', '-', '+', '+', '+', '+') == ERR)
+  if (width < 10 || height < 10 || width * 2 > COLS || height > LINES)
+    throw NcursesError("Map size is not valid.");
+  _lines = height;
+  _nbcols = width * 2;
+  if (border('|', '|', '-', '-', '+', '+', '+', '+') == ERR)
     throw NcursesDisplay::NcursesError("Ncurses runtime error.");
-  if (wrefresh(_win) == ERR)
+  if (refresh() == ERR)
     throw NcursesDisplay::NcursesError("Ncurses runtime error.");
+}
+
+void		NcursesDisplay::cleanScr(void) const
+{
+  int		i(0);
+  std::string	empty_line;
+
+  empty_line.reserve(_nbcols + 1);
+  fill_n(empty_line.begin(), _nbcols, ' ');
+  empty_line[_nbcols] = 0;
+  while (i < _lines)
+    {
+      if (move(i + 1, 1) == ERR ||
+	  printw(empty_line.c_str()) == ERR)
+	throw NcursesError("Unexpected error while drawing\n");
+      ++i;
+    }
 }
 
 void NcursesDisplay::display(const std::vector<AObject*> &map) const
@@ -49,6 +74,7 @@ void NcursesDisplay::display(const std::vector<AObject*> &map) const
 
   end = map.end();
   it = map.begin();
+  cleanScr();
   while (it < end)
     {
       c = ((*it)->getCoord());
@@ -56,14 +82,17 @@ void NcursesDisplay::display(const std::vector<AObject*> &map) const
       z = c.end();
       while (a < z)
 	{
-	  if (wmove(_win, (*a).second + 1, (*a).first * 2 + 1) == ERR ||
-	      wprintw(_win, _chars[(*it)->getType()]) == ERR)
-	    throw NcursesError("Unexpected error while drawing\n");
+	  if (move((*a).second + 1, ((*a).first * 2) + 1) == ERR ||
+	      attron(COLOR_PAIR((*it)->getType() + 1)) == ERR ||
+	      printw(_chars[(*it)->getType()]) == ERR)
+	    {
+	      throw NcursesError("Unexpected error while drawing\n");
+	    }
 	  ++a;
 	}
       ++it;
     }
-  if (wrefresh(_win) == ERR)
+  if (refresh() == ERR)
     throw NcursesError("Undexpected error while drawing");
 }
 
@@ -71,10 +100,11 @@ Key	NcursesDisplay::getKey(void) const
 {
   int	k;
 
-  k = wgetch(_win);
-  return QUIT;
+  k = getch();
   switch (k)
     {
+    case 27:
+      return QUIT;
     case KEY_LEFT:
       return LEFT;
     case KEY_RIGHT:
@@ -88,7 +118,7 @@ Key	NcursesDisplay::getKey(void) const
     default:
       return OTHERS;
     }
-  return UP;
+  return OTHERS;
 }
 
 extern "C" IDisplay *getDisplay()
@@ -96,7 +126,9 @@ extern "C" IDisplay *getDisplay()
   return new NcursesDisplay();
 }
 
-
+///////////
+// Error //
+///////////
 
 NcursesDisplay::NcursesError::NcursesError(const std::string &error) : NibblerException("NcursesDisplay")
 {

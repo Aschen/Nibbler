@@ -18,7 +18,7 @@ Object Game::lookup(const Coord &search) const
 
     while (it != _objects.end())
     {
-        if (find((*it)->getCoord().begin(), (*it)->getCoord().end(), search) != (*it)->getCoord().end())
+      if (find((*it)->getCoord().begin(), (*it)->getCoord().end(), search) != (*it)->getCoord().end())
            result = (*it)->getType();
         ++it;
     }
@@ -38,21 +38,20 @@ void Game::startGame(void)
     {
         snakeHead = this->lookup(python->getNextMove(_direction));
         switch (snakeHead)
-            {
-            case WALL:
-            case SNAKE:
-                std::cout << "Game over !" << std::endl;
-                _flag = MENU;
-                break;
-            case POWERUP:
-                python->grow();
-                fruit->clearPowerup();
-                while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-            case EMPTY:
-                python->move();
-                _display->display(_objects);
-            }
-        usleep(500000);
+        {
+        case WALL:
+        case SNAKE:
+            _flag = MENU;
+            break;
+        case POWERUP:
+            python->grow();
+            fruit->clearPowerup();
+            while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
+        case EMPTY:
+            python->move();
+            _display->display(_objects);
+        }
+        usleep(99000);
     }
 }
 
@@ -66,8 +65,6 @@ void Game::startMenu(void)
     while (_flag >= MENU)
     {
         this->clearGame();
-        std::cout << std::endl << "Bienvenu sur le Menu !" << std::endl;
-        std::cout << "Initialisation du jeux !" << std::endl;
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
@@ -76,10 +73,8 @@ void Game::startMenu(void)
         _display->display(_objects);
         while (_direction == OTHERS && _flag >= MENU)
             usleep(10000);
-        std::cout << "Demarrage de la partie :D" << std::endl;
         if (_flag >= MENU)
             this->startGame();
-        std::cout << "FIN" << std::endl;
     }
 }
 
@@ -102,7 +97,7 @@ void Game::dumpObjects(void) const
 
     while (it != _objects.end())
     {
-        std::cout << "Object of type " << (*it)->getType() << std::endl;
+      std::cout << "Object of type " << (*it)->getType() << std::endl;
         (*it)->dump();
         std::cout << std::endl;
         ++it;
@@ -150,7 +145,7 @@ void *hookKeys(void *data)
         std::cerr << "La c'est la merde !" << std::endl;
     while (nibbler->getFlag() >= MENU)
     {
-        key = nibbler->getDisplay()->getKey();        
+        key = nibbler->getDisplay()->getKey();
         switch (key)
         {
         case QUIT:
@@ -163,7 +158,6 @@ void *hookKeys(void *data)
         case DOWN:
         case LEFT:
         case RIGHT:
-            std::cout << "Set direction " << key << std::endl;
             nibbler->setDirection(key);
             break;
         default:
