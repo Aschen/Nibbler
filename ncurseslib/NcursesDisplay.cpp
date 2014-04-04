@@ -5,11 +5,12 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Wed Apr  2 09:50:19 2014 brunne-r
+// Last update Fri Apr  4 11:24:26 2014 brunne-r
 //
 
 #include <errno.h>
 #include <string.h>
+#include <curses.h>
 #include "NcursesDisplay.hh"
 
 NcursesDisplay::NcursesDisplay()
@@ -37,6 +38,8 @@ NcursesDisplay::~NcursesDisplay()
 
 void NcursesDisplay::init(int width, int height)
 {
+  if (width < 10 || height < 10 || width * 2 > COLS || height > LINES)
+    throw NcursesError("Map size is not valid.");
   _lines = height;
   _nbcols = width * 2;
   if (border('|', '|', '-', '-', '+', '+', '+', '+') == ERR)

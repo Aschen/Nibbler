@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Mon Mar 31 16:35:00 2014 brunne-r
+// Last update Fri Apr  4 11:13:30 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -177,6 +177,9 @@ void		SdlDisplay::initFond(int width, int height)
 
 void		SdlDisplay::init(int width, int height)
 {
+  if (width * SBLOCK > 1920 || height * SBLOCK > 1080
+      || width < 10 || height < 10)
+    throw SdlError("The size of the map is too big");
   _screen = SDL_SetVideoMode(width * SBLOCK,
 			     height * SBLOCK,
 			     0,
