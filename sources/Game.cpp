@@ -65,19 +65,14 @@ void Game::startMenu(void)
     while (_flag >= MENU)
     {
         this->clearGame();
-        //std::cout << std::endl << "Bienvenu sur le Menu !" << std::endl;
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
-        //std::cout << "Initialisation du jeux !" << std::endl;
-        //this->dumpObjects();
         _display->display(_objects);
         sleep(1);
-        //std::cout << "Demarrage de la partie :D" << std::endl;
         this->startGame();
-        //std::cout << "FIN" << std::endl;
     }
     pthread_kill(keyThread, SIGKILL);
 }
