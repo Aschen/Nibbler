@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Fri Apr  4 11:13:30 2014 brunne-r
+// Last update Sat Apr  5 12:24:18 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -13,11 +13,10 @@
 SdlDisplay::SdlDisplay()
 {
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
-    throw SdlError(SDL_GetError());
-
+    throw std::runtime_error(SDL_GetError());
   _surfaces = new SDL_Surface*[3];
   if (!_surfaces)
-    throw SdlError("Cannot allocate more memory.");
+    throw std::runtime_error("Cannot allocate more memory.");
 }
 
 SdlDisplay::~SdlDisplay()
@@ -86,7 +85,7 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
   off.x = 0;
   off.y = 0;
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0)
-    throw SdlError("Unexpected error while drawing\n");
+    throw std::runtime_error("Unexpected error while drawing\n");
   while (it < end)
     {
       c = ((*it)->getCoord());
@@ -102,13 +101,13 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
 	  off.x = (*a).first * SBLOCK;
 	  off.y = (*a).second * SBLOCK;
 	  if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
-	    throw SdlError("Unexpected error while drawing\n");
+	    throw std::runtime_error("Unexpected error while drawing\n");
 	  ++a;
 	}
       ++it;
     }
   if (SDL_Flip(_screen) < 0)
-    throw SdlError("Undexpected error while drawing");
+    throw std::runtime_error("Undexpected error while drawing");
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -152,7 +151,7 @@ void		SdlDisplay::initFond(int width, int height)
   _fond = SDL_CreateRGBSurface(SDL_HWSURFACE, width * SBLOCK,
 			       height * SBLOCK, 32, 0, 0, 0, 0);
   if (!ground || !_fond)
-    throw SdlError("Cannot load images\n");
+    throw std::runtime_error("Cannot load images\n");
   i = 0;
   while (i < width)
     {
@@ -162,7 +161,7 @@ void		SdlDisplay::initFond(int width, int height)
 	  off.x = (i * SBLOCK);
 	  off.y = (j * SBLOCK);
 	  if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
-	    throw SdlError("Unexpected error while drawing\n");
+	    throw std::runtime_error("Unexpected error while drawing\n");
 	  ++j;
 	}
       ++i;
@@ -171,7 +170,7 @@ void		SdlDisplay::initFond(int width, int height)
   off.y = 0;
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0 ||
       SDL_Flip(_screen) < 0)
-    throw SdlError("Unexpected error while drawing\n");
+    throw std::runtime_error("Unexpected error while drawing\n");
   SDL_FreeSurface(ground);
 }
 
@@ -179,13 +178,17 @@ void		SdlDisplay::init(int width, int height)
 {
   if (width * SBLOCK > 1920 || height * SBLOCK > 1080
       || width < 10 || height < 10)
-    throw SdlError("The size of the map is too big");
+    {
+      std::cerr << "map too big" << std::endl;
+      throw std::runtime_error("The size of the map is too big");
+      std::cerr << "shit" << std::endl;
+    }
   _screen = SDL_SetVideoMode(width * SBLOCK,
 			     height * SBLOCK,
 			     0,
 			     SDL_HWSURFACE | SDL_DOUBLEBUF);
   if (!_screen)
-    throw SdlError(SDL_GetError());
+    throw std::runtime_error(SDL_GetError());
   else
     {
       initFond(width, height);
@@ -193,37 +196,15 @@ void		SdlDisplay::init(int width, int height)
       _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
       _surfaces[POWERUP] = IMG_Load("./images/apple.png");
       if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
-	throw SdlError("Cannot load images.");
+	throw std::runtime_error("Cannot load images.");
       _extras[0] = IMG_Load("./images/snake_head.png");
       _extras[1] = IMG_Load("./images/snake_queue.png");
       if (!_extras[0] || !_extras[1])
-	throw SdlError("Cannot load images.");
+	throw std::runtime_error("Cannot load images.");
     }
 }
 
 extern "C" IDisplay *getDisplay(void)
 {
   return new SdlDisplay();
-}
-
-
-///////////
-// Error //
-///////////
-SdlDisplay::SdlError::SdlError(const std::string &error) : NibblerException("SdlDisplay")
-{
-    _msg << error << std::endl;
-}
-
-SdlDisplay::SdlError::SdlError(const SdlDisplay::SdlError &cpy) : NibblerException("SdlDisplay")
-{
-    if (&cpy != this)
-    {
-        _msg << this->getMessage();
-    }
-}
-
-const std::string SdlDisplay::SdlError::getMessage(void) const
-{
-  return _msg.str();
 }

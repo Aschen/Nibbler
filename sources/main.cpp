@@ -24,9 +24,10 @@ int			main(int ac, char **av)
 			      av[3]);
 	  nibbler.startMenu();
         }
-      catch (const NibblerException &e)
+      catch (std::exception const &e)
         {
-	  std::cerr << e.getMessage() << std::endl;
+	  std::cerr << "Runtime caught" << std::endl;
+	  std::cerr << e.what() << std::endl;
 	  return -1;
         }
     }

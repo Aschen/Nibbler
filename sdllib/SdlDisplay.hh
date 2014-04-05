@@ -5,32 +5,22 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Mon Mar 31 16:10:03 2014 brunne-r
+// Last update Sat Apr  5 12:03:17 2014 brunne-r
 //
 
 #ifndef SDLDISPLAY_H
 # define SDLDISPLAY_H
 
+# include <stdexcept>
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
 # include <SDL/SDL_rotozoom.h>
 # include "AObject.hh"
 # include "DLLoader.hh"
 # include "IDisplay.hh"
-# include "NibblerException.hh"
 
 class		SdlDisplay : public IDisplay
 {
-  class		SdlError : public NibblerException
-  {
-  private:
-      std::stringstream _msg;
-  public:
-    SdlError(const std::string &error);
-    SdlError(const SdlError &cpy);
-    ~SdlError(void) throw() {}
-    const std::string getMessage(void) const;
-  };
 private:
   SDL_Surface	*_screen;
   SDL_Surface	*_fond;
