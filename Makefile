@@ -8,7 +8,7 @@
 ## Started on  21/03/2014 12:43
 ##
 
-CXX	=	clang++
+CXX	=	g++
 
 SRCS	=	sources/main.cpp \
 		sources/Snake.cpp \

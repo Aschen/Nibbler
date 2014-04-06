@@ -16,7 +16,7 @@ CXX	=	g++
 
 CXXFLAGS=	-fPIC -Wall -Wextra -W `sdl-config --cflags` -I ../includes -lGL -lGLU
 
-NAME	=	../libopengl.so
+NAME	=	../lib_nibbler_opengl.so
 
 SRCS	=	OpenGLDisplay.cpp \
 

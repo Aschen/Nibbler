@@ -12,11 +12,11 @@
 ## NCURSES
 ##
 
-CXX	=	clang++
+CXX	=	g++
 
 CXXFLAGS=	-fPIC -Wall -Wextra -W -I ../includes
 
-NAME	=	../libncurses.so
+NAME	=	../lib_nibbler_ncurses.so
 
 SRCS	=	NcursesDisplay.cpp \
 

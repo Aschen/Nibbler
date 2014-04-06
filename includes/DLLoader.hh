@@ -47,7 +47,7 @@ public:
     DLLoader(const std::string &dl)
     {
         if ((_dlHandler = dlopen(dl.c_str(), RTLD_LAZY)) == NULL)
-            throw Error(dlerror());
+            throw std::runtime_error(dlerror());
     }
 
     ~DLLoader(void)
@@ -61,7 +61,7 @@ public:
         F	create;
 
         if ((create = reinterpret_cast<F>(dlsym(_dlHandler, entry_point.c_str()))) == NULL)
-            throw Error(dlerror());
+            throw std::runtime_error(dlerror());
         return create();
     }
 };

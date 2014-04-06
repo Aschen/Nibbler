@@ -26,9 +26,9 @@ int			main(int ac, char **av)
         }
       catch (const std::exception &e)
         {
-	  std::cerr << e.what() << std::endl;
-	  return -1;
-        }
+          std::cerr << e.what() << std::endl;
+          return -1;
+      }
     }
   else
     std::cout << "Usage : " << av[0] << " X Y <library> " << std::endl;

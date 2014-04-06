@@ -12,11 +12,11 @@
 ## SDL
 ##
 
-CXX	=	clang++
+CXX	=	g++
 
 CXXFLAGS=	-fPIC -Wall -Wextra -W `sdl-config --cflags` -I ../includes
 
-NAME	=	../libsdl.so
+NAME	=	../lib_nibbler_sdl.so
 
 SRCS	=	SdlDisplay.cpp \
 
