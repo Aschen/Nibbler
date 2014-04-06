@@ -44,18 +44,6 @@ struct  s_color
 
 class   OpenGLDisplay : public IDisplay
 {
-public:
-    class Error : public NibblerException
-    {
-    private:
-        std::stringstream   _msg;
-    public:
-        Error(const std::string &error);
-        Error(void);
-        Error(const Error &cpy);
-        ~Error(void) throw() {}
-        const std::string getMessage(void) const;
-    };
 private:
    Coord          _map;
 public:

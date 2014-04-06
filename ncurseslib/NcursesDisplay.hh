@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:37:26 2014 brunne-r
-// Last update Tue Apr  1 10:50:08 2014 brunne-r
+// Last update Sun Apr  6 13:10:47 2014 brunne-r
 //
 
 #ifndef NCDISPLAY_H
@@ -20,16 +20,6 @@
 
 class		NcursesDisplay : public IDisplay
 {
-  class		NcursesError : public NibblerException
-  {
-  private:
-      std::stringstream _msg;
-  public:
-    NcursesError(const std::string &error);
-    NcursesError(const NcursesError &cpy);
-    ~NcursesError(void) throw() {}
-    const std::string getMessage(void) const;
-  };
 private:
   WINDOW	*_win;
   char		_chars[3][3];

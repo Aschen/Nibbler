@@ -3,7 +3,7 @@
 OpenGLDisplay::OpenGLDisplay(void)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        throw Error();
+      throw std::runtime_error(SDL_GetError());
 }
 
 OpenGLDisplay::~OpenGLDisplay(void)
@@ -205,30 +205,4 @@ Key  OpenGLDisplay::getKey(void) const
 extern "C" IDisplay *getDisplay(void)
 {
     return new OpenGLDisplay();
-}
-
-/////////////
-//  ERROR  //
-/////////////
-OpenGLDisplay::Error::Error(const std::string &error) : NibblerException("OpenGLDisplay")
-{
-    _msg << error;
-}
-
-OpenGLDisplay::Error::Error(void) : NibblerException("OpenGLDisplay")
-{
-    _msg << SDL_GetError();
-}
-
-OpenGLDisplay::Error::Error(const Error &cpy) : NibblerException("OpenGLDisplay")
-{
-    if (&cpy != this)
-    {
-        _msg << cpy.getMessage();
-    }
-}
-
-const std::string OpenGLDisplay::Error::getMessage(void) const
-{
-    return _msg.str();
 }
