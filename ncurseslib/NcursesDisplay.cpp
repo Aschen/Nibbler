@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Mon Mar 24 12:31:17 2014 brunne-r
-// Last update Sun Apr  6 13:11:46 2014 brunne-r
+// Last update Sun Apr  6 22:14:57 2014 brunne-r
 //
 
 #include <errno.h>
@@ -58,11 +58,13 @@ void		NcursesDisplay::cleanScr(void) const
   empty_line.reserve(_nbcols + 1);
   fill_n(empty_line.begin(), _nbcols, ' ');
   empty_line[_nbcols] = 0;
+  if (attron(COLOR_PAIR(8)) == ERR)
+      	throw std::runtime_error("Unexpected error while drawing.");
   while (i < _lines)
     {
       if (move(i + 1, 1) == ERR ||
 	  printw(empty_line.c_str()) == ERR)
-	throw std::runtime_error("Unexpected error while drawing\n");
+	throw std::runtime_error("Unexpected error while drawing.");
       ++i;
     }
 }
