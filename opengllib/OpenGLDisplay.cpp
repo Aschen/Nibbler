@@ -38,31 +38,38 @@ void OpenGLDisplay::drawCube(Coo3 coord, Color col) const
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x, coord.y, coord.z);
     glVertex3d(coord.x + 1, coord.y, coord.z);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x + 1, coord.y, coord.z + 1);
     glVertex3d(coord.x, coord.y, coord.z + 1);
 
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x + 1, coord.y, coord.z);
     glVertex3d(coord.x + 1, coord.y + 1, coord.z);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x + 1, coord.y + 1, coord.z + 1);
     glVertex3d(coord.x + 1, coord.y, coord.z + 1);
 
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x + 1, coord.y + 1, coord.z);
     glVertex3d(coord.x, coord.y + 1, coord.z);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x, coord.y + 1, coord.z + 1);
     glVertex3d(coord.x + 1, coord.y + 1, coord.z + 1);
 
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x, coord.y + 1, coord.z);
     glVertex3d(coord.x, coord.y, coord.z);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x, coord.y, coord.z + 1);
     glVertex3d(coord.x, coord.y + 1, coord.z + 1);
 
     glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x, coord.y, coord.z + 1);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x + 1, coord.y, coord.z + 1);
+    glColor3ub(col.red, col.green, col.blue);
     glVertex3d(coord.x + 1, coord.y + 1, coord.z + 1);
+    glColor3ub(0, 0, 0);
     glVertex3d(coord.x, coord.y + 1, coord.z + 1);
 
     glEnd();
@@ -75,6 +82,7 @@ void OpenGLDisplay::drawFloor() const
     glColor3ub(255, 0, 0);
     glVertex3d(0, 0, 0);
     glVertex3d(_map.first, 0, 0);
+    glColor3ub(50, 50, 50);
     glVertex3d(_map.first, _map.second, 0);
     glVertex3d(0, _map.second, 0);
 
@@ -106,6 +114,10 @@ Color   OpenGLDisplay::getCol(GLubyte red, GLubyte green, GLubyte blue) const
 //////////////
 void OpenGLDisplay::init(int width, int height)
 {
+    if (width * SBLOCK > 1920 || height * SBLOCK > 1080)
+      throw std::runtime_error("The size of the map is too big");
+    else if (width < 10 || height < 10)
+      throw std::runtime_error("The size of the map is too small");
     SDL_WM_SetCaption("Nibbler", NULL);
     SDL_SetVideoMode(width * SBLOCK, height * SBLOCK, 32, SDL_OPENGL);
     glMatrixMode(GL_PROJECTION);
@@ -122,20 +134,18 @@ void OpenGLDisplay::display(const std::vector<AObject*> &map) const
     std::vector<Coord>                      coo;
     std::vector<Coord>::const_iterator      pos, last;
 
-    std::vector<AObject*>::const_iterator   it, end;
+    std::vector<AObject*>::const_iterator   it, begin;
 
     Color                                   col;
 
-    end = map.end();
-    it = map.begin();
+    begin = map.begin();
+    it = map.end();
 
     this->reset();
-    this->setView(getCoo(20, 20 , 12), getCoo(0, 0, 0), getCoo(0, 0, 1));
+    this->setView(getCoo(_map.first/2, _map.second + 5 , (_map.first+_map.second)/2), getCoo(_map.first/2, _map.second/2, 0), getCoo(0, 0, 1));
     glRotated(0.0, 0, 0, 1);
     this->drawFloor();
-    this->drawCube(getCoo(0, 0, 2), getCol(100, 100, 100));
-    this->drawCube(getCoo(7, 15, 2), getCol(100, 100, 0));
-    while (it < end)
+    while (--it >= begin)
     {
         coo = ((*it)->getCoord());
         pos = coo.begin();
@@ -151,6 +161,9 @@ void OpenGLDisplay::display(const std::vector<AObject*> &map) const
         case POWERUP:
             col = getCol(255, 255, 0);
             break;
+        case PORTAL:
+            col = getCol(175, 0, 175);
+            break;
         default:
             col = getCol(255, 0, 255);
             break;
@@ -160,12 +173,7 @@ void OpenGLDisplay::display(const std::vector<AObject*> &map) const
             this->drawCube(getCoo(pos->first, pos->second, 0), col);
             ++pos;
         }
-        ++it;
     }
-//    this->drawCube(getCoo(0, 0, 0), getCol(255, 0, 0), getCol(0, 0, 255));
-//    this->drawCube(getCoo(-2, -2, 0), getCol(255, 255, 0), getCol(0, 100, 100));
-
-
     this->refresh();
 }
 
@@ -179,16 +187,14 @@ Key  OpenGLDisplay::getKey(void) const
     {
         switch (e.key.keysym.sym)
         {
-        case SDLK_UP:
-            return UP;
-        case SDLK_DOWN:
-            return DOWN;
         case SDLK_LEFT:
             return RIGHT;
         case SDLK_RIGHT:
             return LEFT;
         case SDLK_ESCAPE:
             return QUIT;
+        case SDLK_SPACE:
+          return SPACE;
         default:
             return OTHERS;
         }

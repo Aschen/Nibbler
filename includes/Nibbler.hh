@@ -14,6 +14,7 @@
 #define	SBLOCK	40
 
 typedef std::pair<unsigned int, unsigned int>   Coord;
+typedef std::pair<Coord, Coord>     Couple;
 
 typedef enum e_key
 {
@@ -21,14 +22,16 @@ typedef enum e_key
     DOWN = -1,
     LEFT = 2,
     RIGHT = -2,
-    QUIT = 3,
-    OTHERS = 4
+    SPACE = 3,
+    QUIT = 4,
+    OTHERS = 5
 }            Key;
 typedef enum e_object
 {
     WALL = 0,
     SNAKE,
     POWERUP,
+    PORTAL,
     EMPTY
 }            Object;
 typedef enum e_direct
@@ -44,6 +47,11 @@ typedef enum e_flag
     MENU,
     PLAY
 }            Flag;
+typedef enum e_portal
+{
+    IN = 0,
+    OUT
+}           Way;
 
 std::ostream    &operator<<(std::ostream &os, const Coord &coord);
 std::ostream    &operator<<(std::ostream &os, Key key);

@@ -5,11 +5,11 @@ Snake::Snake(const Coord &mapSize, const Coord &start)
 {
     unsigned int     i = 0;
 
-    if (start.first > mapSize.first || start.second > mapSize.second)
+    if (start.first > mapSize.first - 1 || start.second > mapSize.second - 1)
         throw Error(start, _map);
     while (i < _size)
     {
-        if (start.second + i <= mapSize.second)
+        if (start.second + i <= mapSize.second - 1)
             _coords.push_back(Coord(start.first, start.second + i));
         else
             throw Error(start, _map, _size);
@@ -43,6 +43,22 @@ void Snake::move(void)
 void Snake::grow(void)
 {
     _coords.push_back(Coord(_tail.first, _tail.second));
+}
+
+const Coord &Snake::getNextMove(const Coord &next)
+{
+    _head = next;
+    return _head;
+}
+
+const Coord &Snake::getHead() const
+{
+    return _head;
+}
+
+unsigned int Snake::getSize() const
+{
+    return _size;
 }
 
 const Coord &Snake::getNextMove(Key direction)

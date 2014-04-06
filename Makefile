@@ -16,6 +16,7 @@ SRCS	=	sources/main.cpp \
 		sources/Powerup.cpp \
 		sources/NibblerException.cpp \
 		sources/Game.cpp \
+		sources/Portal.cpp \
 
 CXXFLAGS=	-Wall -W -Wextra -I ./includes
 

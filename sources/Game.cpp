@@ -4,6 +4,8 @@ Game::Game(const Coord &map, const std::string &library)
     : _map(map), _dll(DLLoader<IDisplay, IDisplay*(*)()>(library)), _flag(MENU), _direction(OTHERS)
 {
     _display = _dll.getInstance("getDisplay");
+    _moveType = 1;
+    _speed = NORMAL;
 }
 
 Game::~Game(void)
@@ -29,16 +31,29 @@ void Game::startGame(void)
 {
     Snake       *python;
     Powerup     *fruit;
+    Portal      *portal;
     Object      snakeHead;
 
     python = dynamic_cast<Snake*>(_objects[SNAKE]);
     fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
+    portal = dynamic_cast<Portal*>(_objects[PORTAL]);
     _flag = PLAY;
     while (_flag >= PLAY)
     {
-        snakeHead = this->lookup(python->getNextMove(_direction));
+        if (_moveType == 1)
+            snakeHead = this->lookup(python->getNextMove(_direction));
+        else
+        {
+            snakeHead = this->lookup(python->getNextMove(portal->getOut(python->getHead())));
+            _moveType = 1;
+        }
         switch (snakeHead)
         {
+        case PORTAL:
+            _moveType = 2;
+            python->move();
+            _display->display(_objects);
+            break;
         case WALL:
         case SNAKE:
             _flag = MENU;
@@ -51,7 +66,7 @@ void Game::startGame(void)
             python->move();
             _display->display(_objects);
         }
-        usleep(99000);
+        usleep(_speed);
     }
 }
 
@@ -59,6 +74,7 @@ void Game::startMenu(void)
 {
     pthread_t   keyThread;
     Powerup     *fruit;
+    Wall        *wall;
 
     _display->init(_map.first, _map.second);
     pthread_create(&keyThread, NULL, &hookKeys, this);
@@ -66,8 +82,16 @@ void Game::startMenu(void)
     {
         this->clearGame();
         _objects.push_back(new Wall(_map));
+        wall = dynamic_cast<Wall*>(_objects[WALL]);
+        wall->addWall(Coord(_map.first/2+2, _map.second/2-1));
+        wall->addWall(Coord(_map.first/2-2, _map.second/2-1));
+        wall->addWall(Coord(_map.first/2+2, _map.second/2));
+        wall->addWall(Coord(_map.first/2-2, _map.second/2));
+        wall->addWall(Coord(_map.first/2+2, _map.second/2+1));
+        wall->addWall(Coord(_map.first/2-2, _map.second/2+1));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
+        _objects.push_back(new Portal(_map, Couple(Coord(0, _map.second/2), Coord(_map.first - 1, _map.second/2))));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
         _display->display(_objects);
@@ -89,6 +113,8 @@ void Game::clearGame(void)
     }
     _objects.clear();
     _direction = OTHERS;
+    _moveType = 1;
+    _speed = NORMAL;
 }
 
 void Game::dumpObjects(void) const
@@ -124,11 +150,32 @@ void Game::setFlag(Flag flag)
 
 void Game::setDirection(Key key)
 {
-    if (_direction * -1 != key)
-        _direction = key;
+    switch (_direction)
+    {
+    case UP:
+        _direction = (key == LEFT) ? LEFT : RIGHT;
+        break;
+    case DOWN:
+        _direction = (key == LEFT) ? RIGHT : LEFT;
+        break;
+    case LEFT:
+        _direction = (key == LEFT) ? DOWN : UP;
+        break;
+    case RIGHT:
+        _direction = (key == LEFT) ? UP : DOWN;
+        break;
+    default:
+        _direction = UP;
+        break;
+    }
 }
 
-IDisplay *Game::getDisplay() const
+void Game::switchBoost(void)
+{
+    _speed = (_speed == NORMAL) ? BOOST : NORMAL;
+}
+
+IDisplay *Game::getDisplay(void) const
 {
     return _display;
 }
@@ -154,11 +201,12 @@ void *hookKeys(void *data)
             else
                 nibbler->setFlag(EXIT);
             break;
-        case UP:
-        case DOWN:
         case LEFT:
         case RIGHT:
             nibbler->setDirection(key);
+            break;
+        case SPACE:
+            nibbler->switchBoost();
             break;
         default:
             break;
@@ -191,6 +239,9 @@ std::ostream &operator<<(std::ostream &os, Key key)
         break;
     case QUIT:
         os << "QUIT";
+        break;
+    case SPACE:
+        os << "SPACE";
         break;
     case OTHERS:
         os << "OTHER";

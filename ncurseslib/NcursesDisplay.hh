@@ -22,7 +22,7 @@ class		NcursesDisplay : public IDisplay
 {
 private:
   WINDOW	*_win;
-  char		_chars[3][3];
+  char		_chars[4][3];
   int		_lines;
   int		_nbcols;
 public:

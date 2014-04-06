@@ -14,12 +14,13 @@ SdlDisplay::SdlDisplay()
 {
   if (SDL_Init(SDL_INIT_VIDEO) == -1)
     throw std::runtime_error(SDL_GetError());
-  _surfaces = new SDL_Surface*[3];
+  _surfaces = new SDL_Surface*[4];
   if (!_surfaces)
     throw std::runtime_error("Cannot allocate more memory.");
   _surfaces[WALL] = NULL;
   _surfaces[SNAKE] = NULL;
   _surfaces[POWERUP] = NULL;
+  _surfaces[PORTAL] = NULL;
   _extras[0] = NULL;
   _extras[1] = NULL;
   _fond = NULL;
@@ -33,6 +34,8 @@ SdlDisplay::~SdlDisplay()
     SDL_FreeSurface(_surfaces[SNAKE]);
   if (_surfaces[POWERUP])
     SDL_FreeSurface(_surfaces[POWERUP]);
+  if (_surfaces[PORTAL])
+  SDL_FreeSurface(_surfaces[PORTAL]);
   delete[] _surfaces;
   if (_extras[0])
     SDL_FreeSurface(_extras[0]);
@@ -132,16 +135,14 @@ Key			SdlDisplay::getKey(void) const
     {
       switch (e.key.keysym.sym)
 	{
-	case SDLK_UP:
-	  return UP;
-	case SDLK_DOWN:
-	  return DOWN;
 	case SDLK_LEFT:
 	  return LEFT;
 	case SDLK_RIGHT:
 	  return RIGHT;
 	case SDLK_ESCAPE:
 	  return QUIT;
+    case SDLK_SPACE:
+      return SPACE;
 	default:
 	  return OTHERS;
 	}
@@ -191,7 +192,7 @@ void		SdlDisplay::init(int width, int height)
   if (width * SBLOCK > 1920 || height * SBLOCK > 1080)
     throw std::runtime_error("The size of the map is too big");
   else if (width < 10 || height < 10)
-    throw std::runtime_error("The size of the map is too little");
+    throw std::runtime_error("The size of the map is too small");
   _screen = SDL_SetVideoMode(width * SBLOCK,
 			     height * SBLOCK,
 			     0,
@@ -204,7 +205,8 @@ void		SdlDisplay::init(int width, int height)
       _surfaces[WALL] = IMG_Load("./images/wood.png");
       _surfaces[SNAKE] = IMG_Load("./images/snake_body.png");
       _surfaces[POWERUP] = IMG_Load("./images/apple.png");
-      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP])
+      _surfaces[PORTAL] = IMG_Load("./images/portal.png");
+      if (!_surfaces[WALL] || !_surfaces[SNAKE] || !_surfaces[POWERUP] || !_surfaces[PORTAL])
 	throw std::runtime_error("Cannot load images.");
       _extras[0] = IMG_Load("./images/snake_head.png");
       _extras[1] = IMG_Load("./images/snake_queue.png");

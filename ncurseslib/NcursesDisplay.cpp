@@ -22,13 +22,15 @@ NcursesDisplay::NcursesDisplay()
       start_color() == ERR ||
       curs_set(0) == ERR)
     throw std::runtime_error("Can't initialize Ncurses");
+  init_pair(PORTAL + 1, COLOR_RED, COLOR_BLUE);
   init_pair(SNAKE + 1, COLOR_GREEN, COLOR_BLACK);
   init_pair(POWERUP + 1, COLOR_RED, COLOR_BLACK);
   init_pair(WALL + 1, COLOR_BLACK, COLOR_YELLOW);
   init_pair(8, COLOR_WHITE, COLOR_BLACK);
   strncpy(_chars[SNAKE], "[]", 2);
   strncpy(_chars[POWERUP], "::", 2);
-  strncpy(_chars[WALL], "  ", 2);
+  strncpy(_chars[WALL], "##", 2);
+  strncpy(_chars[PORTAL], "()", 2);
 }
 
 NcursesDisplay::~NcursesDisplay()
@@ -109,12 +111,10 @@ Key	NcursesDisplay::getKey(void) const
       return LEFT;
     case KEY_RIGHT:
       return RIGHT;
-    case KEY_DOWN:
-      return DOWN;
-    case KEY_UP:
-      return UP;
     case KEY_F(1):
       return QUIT;
+    case ' ':
+      return SPACE;
     default:
       return OTHERS;
     }
