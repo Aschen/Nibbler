@@ -14,6 +14,12 @@
 class   Game
 {
 public:
+    typedef enum    e_speed
+    {
+        NORMAL = 150000,
+        BOOST = 99000
+    }               Speed;
+public:
     typedef void (Game::*methodPtr)(const AObject *obj);
 private:
     const Coord             _map;
@@ -23,6 +29,7 @@ private:
     IDisplay                *_display;
     std::vector<AObject*>   _objects;
     int                     _moveType;
+    unsigned int            _speed;
 public:
     Game(const Coord &map, const std::string &library);
     ~Game(void);
@@ -38,6 +45,7 @@ public:
     IDisplay        *getDisplay(void) const;
     void            setFlag(Flag flag);
     void            setDirection(Key key);
+    void            switchBoost(void);
 };
 
 void        *hookKeys(void *data);

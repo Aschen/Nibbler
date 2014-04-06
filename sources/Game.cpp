@@ -5,6 +5,7 @@ Game::Game(const Coord &map, const std::string &library)
 {
     _display = _dll.getInstance("getDisplay");
     _moveType = 1;
+    _speed = NORMAL;
 }
 
 Game::~Game(void)
@@ -30,30 +31,30 @@ void Game::startGame(void)
 {
     Snake       *python;
     Powerup     *fruit;
-    Portal      *portal;
+//    Portal      *portal;
     Object      snakeHead;
 
     python = dynamic_cast<Snake*>(_objects[SNAKE]);
     fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
-    portal = dynamic_cast<Portal*>(_objects[PORTAL]);
+//    portal = dynamic_cast<Portal*>(_objects[PORTAL]);
     _flag = PLAY;
     while (_flag >= PLAY)
     {
-        this->dumpObjects();
-        if (_moveType == 1)
-            snakeHead = this->lookup(python->getNextMove(_direction));
-        else
-        {
-            snakeHead = this->lookup(python->getNextMove(portal->getOut(python->getHead())));
-            _moveType = 1;
-        }
+        snakeHead = this->lookup(python->getNextMove(_direction));
+//        if (_moveType == 1)
+//            snakeHead = this->lookup(python->getNextMove(_direction));
+//        else
+//        {
+//            snakeHead = this->lookup(python->getNextMove(portal->getOut(python->getHead())));
+//            _moveType = 1;
+//        }
         switch (snakeHead)
         {
-        case PORTAL:
-            _moveType = 2;
-            python->move();
-            _display->display(_objects);
-            break;
+//        case PORTAL:
+//            _moveType = 2;
+//            python->move();
+//            _display->display(_objects);
+//            break;
         case WALL:
         case SNAKE:
             _flag = MENU;
@@ -66,7 +67,7 @@ void Game::startGame(void)
             python->move();
             _display->display(_objects);
         }
-        usleep(99000);
+        usleep(_speed);
     }
 }
 
@@ -83,7 +84,7 @@ void Game::startMenu(void)
         _objects.push_back(new Wall(_map));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
-        _objects.push_back(new Portal(_map, Couple(Coord(0, _map.second/2), Coord(_map.first - 1, _map.second/2))));
+//        _objects.push_back(new Portal(_map, Couple(Coord(0, _map.second/2), Coord(_map.first - 1, _map.second/2))));
         fruit = dynamic_cast<Powerup*>(_objects[POWERUP]);
         while (fruit->addPowerup(this->lookup(fruit->getNextPowerup())));
         this->dumpObjects();
@@ -107,6 +108,7 @@ void Game::clearGame(void)
     _objects.clear();
     _direction = OTHERS;
     _moveType = 1;
+    _speed = NORMAL;
 }
 
 void Game::dumpObjects(void) const
@@ -146,7 +148,12 @@ void Game::setDirection(Key key)
         _direction = key;
 }
 
-IDisplay *Game::getDisplay() const
+void Game::switchBoost(void)
+{
+    _speed = (_speed == NORMAL) ? BOOST : NORMAL;
+}
+
+IDisplay *Game::getDisplay(void) const
 {
     return _display;
 }
@@ -177,6 +184,9 @@ void *hookKeys(void *data)
         case LEFT:
         case RIGHT:
             nibbler->setDirection(key);
+            break;
+        case SPACE:
+            nibbler->switchBoost();
             break;
         default:
             break;
@@ -209,6 +219,9 @@ std::ostream &operator<<(std::ostream &os, Key key)
         break;
     case QUIT:
         os << "QUIT";
+        break;
+    case SPACE:
+        os << "SPACE";
         break;
     case OTHERS:
         os << "OTHER";

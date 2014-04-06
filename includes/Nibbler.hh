@@ -22,8 +22,9 @@ typedef enum e_key
     DOWN = -1,
     LEFT = 2,
     RIGHT = -2,
-    QUIT = 3,
-    OTHERS = 4
+    SPACE = 3,
+    QUIT = 4,
+    OTHERS = 5
 }            Key;
 typedef enum e_object
 {
