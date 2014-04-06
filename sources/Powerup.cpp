@@ -10,7 +10,7 @@ Powerup::~Powerup(void)
 {
 }
 
-int Powerup::addPowerup(Object obj)
+int Powerup::addPowerup(const Object obj)
 {
     if (obj != EMPTY)
         return 1;

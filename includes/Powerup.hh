@@ -25,7 +25,7 @@ private:
 public:
     Powerup(const Coord &mapSize);
     ~Powerup(void);
-    int             addPowerup(Object obj);
+    int             addPowerup(const Object obj);
     Coord           &getNextPowerup(void);
     void            clearPowerup(void);
 public:
