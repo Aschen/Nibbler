@@ -5,7 +5,7 @@
 // Login   <brunne-r@epitech.net>
 //
 // Started on  Fri Mar 21 16:58:14 2014 brunne-r
-// Last update Sat Apr  5 12:24:18 2014 brunne-r
+// Last update Sun Apr  6 16:25:07 2014 brunne-r
 //
 
 #include "SdlDisplay.hh"
@@ -17,17 +17,29 @@ SdlDisplay::SdlDisplay()
   _surfaces = new SDL_Surface*[3];
   if (!_surfaces)
     throw std::runtime_error("Cannot allocate more memory.");
+  _surfaces[WALL] = NULL;
+  _surfaces[SNAKE] = NULL;
+  _surfaces[POWERUP] = NULL;
+  _extras[0] = NULL;
+  _extras[1] = NULL;
+  _fond = NULL;
 }
 
 SdlDisplay::~SdlDisplay()
 {
-  SDL_FreeSurface(_surfaces[WALL]);
-  SDL_FreeSurface(_surfaces[SNAKE]);
-  SDL_FreeSurface(_surfaces[POWERUP]);
+  if (_surfaces[WALL])
+    SDL_FreeSurface(_surfaces[WALL]);
+  if (_surfaces[SNAKE])
+    SDL_FreeSurface(_surfaces[SNAKE]);
+  if (_surfaces[POWERUP])
+    SDL_FreeSurface(_surfaces[POWERUP]);
   delete[] _surfaces;
-  SDL_FreeSurface(_extras[0]);
-  SDL_FreeSurface(_extras[1]);
-  SDL_FreeSurface(_fond);
+  if (_extras[0])
+    SDL_FreeSurface(_extras[0]);
+  if (_extras[1])
+    SDL_FreeSurface(_extras[1]);
+  if (_fond)
+    SDL_FreeSurface(_fond);
   SDL_Quit();
 }
 
@@ -85,7 +97,7 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
   off.x = 0;
   off.y = 0;
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0)
-    throw std::runtime_error("Unexpected error while drawing\n");
+    throw std::runtime_error("Unexpected error while drawing.");
   while (it < end)
     {
       c = ((*it)->getCoord());
@@ -101,13 +113,13 @@ void		SdlDisplay::display(const std::vector<AObject*> &map) const
 	  off.x = (*a).first * SBLOCK;
 	  off.y = (*a).second * SBLOCK;
 	  if (SDL_BlitSurface(actu, NULL, _screen, &off) < 0)
-	    throw std::runtime_error("Unexpected error while drawing\n");
+	    throw std::runtime_error("Unexpected error while drawing.");
 	  ++a;
 	}
       ++it;
     }
   if (SDL_Flip(_screen) < 0)
-    throw std::runtime_error("Undexpected error while drawing");
+    throw std::runtime_error("Unexpected error while drawing.");
 }
 
 Key			SdlDisplay::getKey(void) const
@@ -151,7 +163,7 @@ void		SdlDisplay::initFond(int width, int height)
   _fond = SDL_CreateRGBSurface(SDL_HWSURFACE, width * SBLOCK,
 			       height * SBLOCK, 32, 0, 0, 0, 0);
   if (!ground || !_fond)
-    throw std::runtime_error("Cannot load images\n");
+    throw std::runtime_error("Cannot load images.");
   i = 0;
   while (i < width)
     {
@@ -161,7 +173,7 @@ void		SdlDisplay::initFond(int width, int height)
 	  off.x = (i * SBLOCK);
 	  off.y = (j * SBLOCK);
 	  if (SDL_BlitSurface(ground, NULL, _fond, &off) < 0)
-	    throw std::runtime_error("Unexpected error while drawing\n");
+	    throw std::runtime_error("Unexpected error while drawing.");
 	  ++j;
 	}
       ++i;
@@ -170,19 +182,16 @@ void		SdlDisplay::initFond(int width, int height)
   off.y = 0;
   if (SDL_BlitSurface(_fond, NULL, _screen, &off) < 0 ||
       SDL_Flip(_screen) < 0)
-    throw std::runtime_error("Unexpected error while drawing\n");
+    throw std::runtime_error("Unexpected error while drawing.");
   SDL_FreeSurface(ground);
 }
 
 void		SdlDisplay::init(int width, int height)
 {
-  if (width * SBLOCK > 1920 || height * SBLOCK > 1080
-      || width < 10 || height < 10)
-    {
-      std::cerr << "map too big" << std::endl;
-      throw std::runtime_error("The size of the map is too big");
-      std::cerr << "shit" << std::endl;
-    }
+  if (width * SBLOCK > 1920 || height * SBLOCK > 1080)
+    throw std::runtime_error("The size of the map is too big");
+  else if (width < 10 || height < 10)
+    throw std::runtime_error("The size of the map is too little");
   _screen = SDL_SetVideoMode(width * SBLOCK,
 			     height * SBLOCK,
 			     0,
