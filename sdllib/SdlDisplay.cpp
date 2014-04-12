@@ -135,7 +135,11 @@ Key			SdlDisplay::getKey(void) const
     {
       switch (e.key.keysym.sym)
 	{
-	case SDLK_LEFT:
+      case SDLK_UP:
+        return UP;
+      case SDLK_DOWN:
+        return DOWN;
+    case SDLK_LEFT:
 	  return LEFT;
 	case SDLK_RIGHT:
 	  return RIGHT;

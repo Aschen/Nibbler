@@ -150,24 +150,26 @@ void Game::setFlag(Flag flag)
 
 void Game::setDirection(Key key)
 {
-    switch (_direction)
-    {
-    case UP:
-        _direction = (key == LEFT) ? LEFT : RIGHT;
-        break;
-    case DOWN:
-        _direction = (key == LEFT) ? RIGHT : LEFT;
-        break;
-    case LEFT:
-        _direction = (key == LEFT) ? DOWN : UP;
-        break;
-    case RIGHT:
-        _direction = (key == LEFT) ? UP : DOWN;
-        break;
-    default:
-        _direction = UP;
-        break;
-    }
+    if (_direction * -1 != key)
+        _direction = key;
+    // switch (_direction)
+    // {
+    // case UP:
+    //     _direction = (key == LEFT) ? LEFT : RIGHT;
+    //     break;
+    // case DOWN:
+    //     _direction = (key == LEFT) ? RIGHT : LEFT;
+    //     break;
+    // case LEFT:
+    //     _direction = (key == LEFT) ? DOWN : UP;
+    //     break;
+    // case RIGHT:
+    //     _direction = (key == LEFT) ? UP : DOWN;
+    //     break;
+    // default:
+    //     _direction = UP;
+    //     break;
+    // }
 }
 
 void Game::switchBoost(void)
@@ -202,6 +204,8 @@ void *hookKeys(void *data)
                 nibbler->setFlag(EXIT);
             break;
         case LEFT:
+        case UP:
+        case DOWN:
         case RIGHT:
             nibbler->setDirection(key);
             break;
