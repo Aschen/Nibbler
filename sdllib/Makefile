@@ -22,7 +22,7 @@ SRCS	=	SdlDisplay.cpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL_image
+LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL -lSDL_image
 
 all:		$(NAME)
 

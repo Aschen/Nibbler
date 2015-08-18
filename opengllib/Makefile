@@ -22,7 +22,7 @@ SRCS	=	OpenGLDisplay.cpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL_image -lglut -lGL -lGLU -lm
+LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL_image -lglut -lGL -lGLU -lm -lSDL_gfx
 
 all:		$(NAME)
 

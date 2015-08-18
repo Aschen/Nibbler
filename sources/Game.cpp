@@ -83,12 +83,6 @@ void Game::startMenu(void)
         this->clearGame();
         _objects.push_back(new Wall(_map));
         wall = dynamic_cast<Wall*>(_objects[WALL]);
-        wall->addWall(Coord(_map.first/2+2, _map.second/2-1));
-        wall->addWall(Coord(_map.first/2-2, _map.second/2-1));
-        wall->addWall(Coord(_map.first/2+2, _map.second/2));
-        wall->addWall(Coord(_map.first/2-2, _map.second/2));
-        wall->addWall(Coord(_map.first/2+2, _map.second/2+1));
-        wall->addWall(Coord(_map.first/2-2, _map.second/2+1));
         _objects.push_back(new Snake(_map, Coord(_map.first/2, _map.second/2)));
         _objects.push_back(new Powerup(_map));
         _objects.push_back(new Portal(_map, Couple(Coord(0, _map.second/2), Coord(_map.first - 1, _map.second/2))));

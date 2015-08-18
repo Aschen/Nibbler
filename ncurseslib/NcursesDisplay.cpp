@@ -113,6 +113,10 @@ Key	NcursesDisplay::getKey(void) const
       return LEFT;
     case KEY_RIGHT:
       return RIGHT;
+    case KEY_UP:
+      return UP;
+    case KEY_DOWN:
+      return DOWN;
     case KEY_F(1):
       return QUIT;
     case ' ':
