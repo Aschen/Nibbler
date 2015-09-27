@@ -27,7 +27,7 @@ LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL_image -lglut -lGL -lGLU -lm -
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
-	$(CXX) -o $(NAME) -shared $(OBJS) -lGL -lGLU
+	$(CXX) -o $(NAME) -shared $(OBJS) -lGL -lGLU -lSDL
 
 clean:
 	rm -f $(OBJS)

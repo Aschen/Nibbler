@@ -27,7 +27,7 @@ LDFLAGS	=	-I ../includes -lncurses
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
-	$(CXX) -o $(NAME) -shared $(OBJS)
+	$(CXX) -o $(NAME) -shared $(OBJS) -lncurses
 clean:
 	rm -f $(OBJS)
 

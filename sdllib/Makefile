@@ -14,7 +14,7 @@
 
 CXX	=	g++
 
-CXXFLAGS=	-fPIC -Wall -Wextra -W `sdl-config --cflags` -I ../includes
+CXXFLAGS=	-fPIC -Wall -Wextra -W `sdl-config --cflags` -I ../includes -lSDL_gfx
 
 NAME	=	../lib_nibbler_sdl.so
 
@@ -22,12 +22,13 @@ SRCS	=	SdlDisplay.cpp \
 
 OBJS	=	$(SRCS:.cpp=.o)
 
-LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL -lSDL_image
+LDFLAGS	=	-I ../includes `sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx
 
 all:		$(NAME)
 
 $(NAME):	$(OBJS)
-	$(CXX) -o $(NAME) -shared $(OBJS)
+	$(CXX) -o $(NAME) -shared $(OBJS) -lSDL -lSDL_image -lSDL_gfx
+
 clean:
 	rm -f $(OBJS)
 
